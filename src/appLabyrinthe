@@ -1,0 +1,66 @@
+@startuml
+
+class Board{
+    - {final} size: Integer
+    - _paths: Boolean[*]
+    + <<create>> Board(setTiles Tile[*])
+    - createBoard(setTiles Tile[*])
+    - createPaths()
+    + ChangeTileCol(x: Integer): Tile
+    + ChangeTileRow(y: Integer): Tile
+    - changePathsCol(x: Integer)
+    - changePathsRow(y: Integer)
+    + getTileAtPosition(x: Integer, y: Integer)
+    ~ getPaths(): Boolean[*]
+}
+Board o--> "*\n- _board" Tile
+class Player{
+    - _goalSuccessful: Integer
+    - _goalNotSuccessful: Integer
+    + <<create>> Player(goals: Goal[*])
+    + isRestGoal(): Boolean
+    + nextGoal()
+    + getCurrentGoal():Goal
+    + getGoalSuccessful(): Integer
+    + getGoalNotSuccessful(): Integer
+}
+Player o-->"*\n- _goalStack" Goal
+Player o--> "1\n- _currentGoal" Goal
+
+class Game{
+    + <<create>> Game()
+    + initGame()
+}
+
+class Tile{
+    - {final} _form: Boolean[*]
+    + <<create>> Tile(goal: Goal, form: Boolean[*])
+    + rotate()
+    + existGoal(): Boolean
+    + getGoal(): Goal
+    + getForm(): Boolean[*]
+    + toString(): String
+}
+Tile o-->"1\n- _goal" Goal: > have
+
+class TileFactory{
+    + <<create>> TileFactory
+    + createT(): Tile
+    + createI(): Tile
+    + createL(): Tile
+    + createT(goal: Goal): Tile
+    + createI(goal: Goal): Tile
+    + createL(goal: Goal): Tile
+}
+
+enum Goal{
+    TEST
+}
+
+Game --> TileFactory: "uses"
+TileFactory --> Tile: "uses"
+Game --> Player: "uses"
+Game --> Board: "uses"
+Board --> Tile: "uses"
+
+@enduml
