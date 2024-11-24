@@ -1,3 +1,5 @@
+package model;
+
 public class Tile {
     private final boolean[] _form;
     private final Goal _goal;

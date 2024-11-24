@@ -1,4 +1,11 @@
+import controller.BoardObserver;
+import model.Board;
+import model.Tile;
+import model.TileFactory;
+import view.View;
+
 public class Game {
+
 
     private Tile _currentTile;
 
@@ -17,5 +24,13 @@ public class Game {
         }
         Board bd = new Board(set);
         _currentTile = ft.createI();
+
+        View view = new View(bd);
+        bd.addObserver(view);
+
+        bd.changeTileCol(1, _currentTile);
+
+        view.display("Game created");
+
     }
 }
