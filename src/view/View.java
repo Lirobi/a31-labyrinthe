@@ -12,17 +12,20 @@ public class View implements BoardObserver {
 
     }
     public void display(String message) {
-        System.out.println(message);
+        System.out.print(message);
     }
 
 
-
-
     /**
-     * @param board
+     * @param b
      */
     @Override
-    public void updateBoard(Board board) {
-        display("Board updated: " + board.getTileAtPosition(0,0).toString());
+    public void updateBoard(Board b) {
+        for(int i = 0; i < b.getSize(); i++) {
+            for(int j = 0; j < b.getSize(); j++) {
+                display(b.getTileAtPosition(i,j).toString());
+            }
+            display("\n");
+        }
     }
 }

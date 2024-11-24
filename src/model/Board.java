@@ -123,6 +123,10 @@ public class Board {
         return _paths;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public void notifyObservers() {
         for (BoardObserver obs : _observers) {
             obs.updateBoard(this);

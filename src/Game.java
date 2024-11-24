@@ -30,7 +30,5 @@ public class Game {
 
         bd.changeTileCol(1, _currentTile);
 
-        view.display("Game created");
-
     }
 }
