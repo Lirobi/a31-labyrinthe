@@ -1,14 +1,13 @@
-package view;
+package app.view;
 
-import controller.BoardObserver;
-import model.Board;
-import model.TileFactory;
+import app.model.BoardObserver;
+import app.model.Board;
 
 public class View implements BoardObserver {
     private Board _board;
     public View(Board board) {
-        this._board = board;
-        this._board.addObserver(this);
+        _board = board;
+        _board.addObserver(this);
 
     }
     public void display(String message) {

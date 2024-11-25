@@ -1,6 +1,4 @@
-package model;
-
-import controller.BoardObserver;
+package app.model;
 
 import java.util.ArrayList;
 import java.util.List;

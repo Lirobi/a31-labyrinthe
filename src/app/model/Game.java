@@ -1,8 +1,6 @@
-import controller.BoardObserver;
-import model.Board;
-import model.Tile;
-import model.TileFactory;
-import view.View;
+package app.model;
+
+import app.view.View;
 
 public class Game {
 

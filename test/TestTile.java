@@ -1,5 +1,5 @@
-import model.Tile;
-import model.TileFactory;
+import app.model.Tile;
+import app.model.TileFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

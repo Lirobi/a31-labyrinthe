@@ -1,4 +1,4 @@
-package model;
+package app.model;
 
 public class Tile {
     private final boolean[] _form;
