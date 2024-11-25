@@ -27,6 +27,6 @@ public class Game {
         bd.addObserver(view);
 
         bd.changeTileCol(1, _currentTile);
-
     }
+
 }
