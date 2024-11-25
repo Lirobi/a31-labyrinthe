@@ -2,10 +2,15 @@ package app.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 public class Board {
 
+
+
     private List<BoardObserver> _observers = new ArrayList<BoardObserver>();
+
+    private final HashMap<Player, Integer[]> _playersPositions = new HashMap<Player, Integer[]>();
 
     private final int size = 7;
     private final Tile[][] _board = new Tile[size][size];
@@ -129,6 +134,21 @@ public class Board {
         for (BoardObserver obs : _observers) {
             obs.updateBoard(this);
         }
+    }
+
+
+    public void addPlayer(Player player, Integer[] position) {
+        _playersPositions.put(player, position);
+    }
+
+    public void movePlayer(Player player, Integer[] position) {
+        if(!_playersPositions.containsKey(player))
+            throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
+
+        if(position[0] > this.getSize() || position[1] > this.getSize())
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+
+        _playersPositions.put(player, position);
     }
 
     public void addObserver(BoardObserver observer) {

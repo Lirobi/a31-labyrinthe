@@ -1,7 +1,7 @@
-import app.model.Game;
+import app.controller.GameController;
 
 public class App {
     public static void main(String[] args) {
-        Game game = new Game();
+        GameController game = new GameController();
     }
 }
