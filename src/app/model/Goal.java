@@ -1,7 +1,30 @@
 package app.model;
 
-enum Goal
+public enum Goal
 {
-    TEST
+    WITCH_HAT,
+    KEY,
+    RING,
+    CHANDELIER,
+    TREASURE_MAP,
+    CROWN,
+    SWORD,
+    SPELL_BOOK,
+    MAGIC_WAND,
+    SHIELD,
+    MAGIC_POTION,
+    TREASURE_CHEST,
+    GHOST,
+    DRAGON,
+    BAT,
+    SPIDER,
+    GNOME,
+    FAIRY,
+    SKELETON,
+    GRIFFIN,
+    GOBLIN,
+    MINOTAUR,
+    LICORN,
+    PHOENIX,
+    TROLL
 }
-// Il faudra voir les 24 objectifs à mettre en analysant l'image sur le sujet

@@ -5,18 +5,21 @@ import java.util.Stack;
 
 public class Player {
 
-    private final Stack<Goal> _goalsStack = new Stack<>();
+    private final Stack<Goal> _goalsStack;
     private Goal _currentGoal;
     private int _goalSuccessful = 0;
     private int _goalNotSuccessful;
 
-    public Player(ArrayList<Goal> goals)
+    public Player(Stack<Goal> goals)
     {
         _goalNotSuccessful = goals.size();
+        _goalsStack = goals;
+        /*
         while (goals.size() != 0) {
             _goalsStack.push(goals.get(0));
             goals.remove(0);
         }
+        */
     }
     public int getGoalSuccessful()
     {

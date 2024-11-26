@@ -1,7 +1,12 @@
-import app.model.Game;
+import app.controller.GameController;
+import app.model.Board;
+import app.view.LabyrinthDisplay;
 
 public class App {
     public static void main(String[] args) {
-        Game game = new Game();
+        Board bd = new Board();
+        GameController game = new GameController(bd);
+        LabyrinthDisplay view = new LabyrinthDisplay();
+        bd.addObserver(view);
     }
 }

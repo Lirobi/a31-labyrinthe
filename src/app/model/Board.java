@@ -2,21 +2,28 @@ package app.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 public class Board {
 
     private final List<BoardObserver> _observers = new ArrayList<>();
+
+    // Modifier le tableau d'entier en class vector2D
+    // Créer un patron de conception pour le changement de tuiles du plateau car redondance
+    private final HashMap<Player, Integer[]> _playersPositions = new HashMap<>();
+
     private final int size = 7;
     private final Tile[][] _board = new Tile[size][size];
    // private final ArrayList<Direction>[][] _paths = new ArrayList[size][size];
 
-    public Board(Tile[] setTiles)
+    public Board()
+    {
+
+    }
+    public void initBoard(Tile[] setTiles)
     {
         createBoard(setTiles);
-     //   createPaths();
-
         notifyObservers();
-
     }
 
     private void createBoard(Tile[] setTiles)
@@ -165,7 +172,7 @@ public class Board {
     }
      */
 
-    public Boolean isAvailable(int x, int y, Direction dir)
+    public Boolean isAvailableMoving(int x, int y, Direction dir)
     {
         return _board[x][y].isDirectionPossible(dir);
     }
@@ -178,6 +185,23 @@ public class Board {
         for (BoardObserver obs : _observers) {
             obs.updateBoard(this);
         }
+    }
+
+    public void addPlayer(Player player, Integer[] position) {
+        _playersPositions.put(player, position);
+    }
+
+    // Le joueur ne peut se déplacer que d'une case à la fois
+    public void movePlayer(Player player, Integer[] position) {
+        if(!_playersPositions.containsKey(player))
+            throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
+
+        if(position[0] > this.getSize() || position[1] > this.getSize() || position[0] < 0 || position[1] < 0)
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+
+        _playersPositions.put(player, position);
+
+        notifyObservers();
     }
 
     public void addObserver(BoardObserver observer) {
