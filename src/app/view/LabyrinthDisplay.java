@@ -1,13 +1,11 @@
 package app.view;
 
-import app.model.BoardObserver;
-import app.model.Board;
-import app.model.Player;
-import app.model.Tile;
+import app.model.*;
 
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
@@ -31,12 +29,12 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     }
 
     @Override
-    public void updatePlayer(HashMap<Player, Integer[]> player)
+    public void updatePlayer(HashMap<Player, Vector2D> player)
     {
-        for (Map.Entry<Player, Integer[]> entry : player.entrySet())
+        for (Map.Entry<Player, Vector2D> entry : player.entrySet())
         {
             display(entry.getKey().toString());
-            display("Le joueur est à la position (" + entry.getValue()[0] + "," + entry.getValue()[1]+")");
+            display("Le joueur est à la position (" + entry.getValue().getX() + "," + entry.getValue().getY()+")");
         }
     }
 }

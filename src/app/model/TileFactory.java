@@ -14,7 +14,7 @@ public class TileFactory {
         directions.push(Direction.EAST);
         directions.push(Direction.NORTH);
         directions.push(Direction.WEST);
-        return new Tile(goal, directions);
+        return new Tile(goal, directions, "");
     }
     public Tile createT()
     {
@@ -22,34 +22,34 @@ public class TileFactory {
         directions.push(Direction.EAST);
         directions.push(Direction.NORTH);
         directions.push(Direction.WEST);
-        return new Tile(null, directions);
+        return new Tile(null, directions, "");
     }
     public Tile createI(Goal goal)
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.NORTH);
         directions.push(Direction.SOUTH);
-        return new Tile(goal, directions);
+        return new Tile(goal, directions, "");
     }
     public Tile createI()
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.NORTH);
         directions.push(Direction.SOUTH);
-        return new Tile(null, directions);
+        return new Tile(null, directions, "");
     }
     public Tile createL(Goal goal)
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.EAST);
         directions.push(Direction.NORTH);
-        return new Tile(goal, directions);
+        return new Tile(goal, directions, "");
     }
     public Tile createL()
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.EAST);
         directions.push(Direction.NORTH);
-        return new Tile(null, directions);
+        return new Tile(null, directions, "");
     }
 }

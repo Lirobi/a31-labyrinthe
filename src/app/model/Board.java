@@ -3,6 +3,7 @@ package app.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class Board {
 
@@ -10,7 +11,7 @@ public class Board {
 
     // Modifier le tableau d'entier en class vector2D
     // Créer un patron de conception pour le changement de tuiles du plateau car redondance
-    private final HashMap<Player, Integer[]> _playersPositions = new HashMap<>();
+    private final HashMap<Player, Vector2D> _playersPositions = new HashMap<>();
 
     private final int SIZE = 7;
     private final Tile[][] _board = new Tile[SIZE][SIZE];
@@ -174,10 +175,10 @@ public class Board {
     }
      */
 
-    public Boolean isAvailableMoving(int x, int y, Direction dir)
+   /* public Boolean isAvailableMoving(int x, int y, Direction dir)
     {
         return _board[x][y].isDirectionPossible(dir);
-    }
+    }*/
 
     public int getSize() {
         return SIZE;
@@ -195,11 +196,11 @@ public class Board {
         }
     }
 
-    public void addPlayer(Player player, Integer[] position) {
+    public void addPlayer(Player player, Vector2D position) {
         _playersPositions.put(player, position);
         notifyObserversPlayer();
     }
-    public HashMap<Player, Integer[]> getPlayer()
+    public HashMap<Player, Vector2D> getPlayer()
     {
         return _playersPositions;
     }
@@ -222,40 +223,32 @@ public class Board {
     public void movePlayer(Player player, Direction direction) {
         if(!_playersPositions.containsKey(player))
             throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
-        Integer[] vector2 = _playersPositions.get(player);
+        Vector2D vector2 = _playersPositions.get(player);
 
-        if(vector2[0] == 0 && direction == Direction.NORTH)
+        if(vector2.getX() == 0 && direction == Direction.NORTH)
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2[0] == SIZE && direction == Direction.SOUTH)
+        if(vector2.getX() == SIZE && direction == Direction.SOUTH)
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2[1] == 0 && direction == Direction.WEST)
+        if(vector2.getY() == 0 && direction == Direction.WEST)
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2[0] == SIZE && direction == Direction.EAST)
+        if(vector2.getY() == SIZE && direction == Direction.EAST)
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
 
-        if (!_board[vector2[0]-1][vector2[1]].isDirectionPossible(direction))
+        if (!_board[vector2.getX()-1][vector2.getY()].isDirectionPossible(direction))
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2[0]+1][vector2[1]].isDirectionPossible(direction))
+        if (!_board[vector2.getX()+1][vector2.getY()].isDirectionPossible(direction))
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2[0]-1][vector2[1]+1].isDirectionPossible(direction))
+        if (!_board[vector2.getX()-1][vector2.getY()+1].isDirectionPossible(direction))
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2[0]-1][vector2[1]-1].isDirectionPossible(direction))
+        if (!_board[vector2.getX()-1][vector2.getY()-1].isDirectionPossible(direction))
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
 
         switch (direction)
         {
-            case EAST ->{
-                     vector2[1]++;
-                    _playersPositions.replace(player, vector2);}
-            case WEST ->{
-                    vector2[1]--;
-                    _playersPositions.replace(player, vector2);}
-            case NORTH ->{
-                    vector2[0]--;
-                    _playersPositions.replace(player, vector2);}
-            case SOUTH ->{
-                    vector2[0]++;
-                    _playersPositions.replace(player, vector2);}
+            case EAST ->_playersPositions.get(player).moveRight();
+            case WEST ->_playersPositions.get(player).moveLeft();
+            case NORTH ->_playersPositions.get(player).moveTop();
+            case SOUTH -> _playersPositions.get(player).moveBottom();
         }
         notifyObserversPlayer();
     }
