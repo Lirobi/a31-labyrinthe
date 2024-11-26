@@ -12,8 +12,8 @@ public class Board {
     // Créer un patron de conception pour le changement de tuiles du plateau car redondance
     private final HashMap<Player, Integer[]> _playersPositions = new HashMap<>();
 
-    private final int size = 7;
-    private final Tile[][] _board = new Tile[size][size];
+    private final int SIZE = 7;
+    private final Tile[][] _board = new Tile[SIZE][SIZE];
    // private final ArrayList<Direction>[][] _paths = new ArrayList[size][size];
 
     public Board()
@@ -23,16 +23,16 @@ public class Board {
     public void initBoard(Tile[] setTiles)
     {
         createBoard(setTiles);
-        notifyObservers();
+        notifyObserversBoard();
     }
 
     private void createBoard(Tile[] setTiles)
     {
-        for (int i = 0; i < size*size; i++)
+        for (int i = 0; i < SIZE * SIZE; i++)
         {
-            _board[i/size][i%size] = setTiles[i];
+            _board[i/ SIZE][i% SIZE] = setTiles[i];
         }
-        notifyObservers();
+        notifyObserversBoard();
     }
 /*
     private void createPaths() {
@@ -63,15 +63,15 @@ public class Board {
         if (x % 2 == 1)
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
-        Tile tempRetour = _board[x][size-1];
-        for (int i = size-1; i > 0; i--)
+        Tile tempRetour = _board[x][SIZE -1];
+        for (int i = SIZE -1; i > 0; i--)
         {
             _board[x][i] = _board[x][i-1];
         }
         _board[x][0] = newTile;
     //    changePathsCol(x);
 
-        notifyObservers();
+        notifyObserversBoard();
 
         return tempRetour;
     }
@@ -82,14 +82,14 @@ public class Board {
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
         Tile tempRetour = _board[x][0];
-        for (int i = 0; i < size-1; i++)
+        for (int i = 0; i < SIZE -1; i++)
         {
             _board[x][i] = _board[x][i+1];
         }
-        _board[x][size-1] = newTile;
+        _board[x][SIZE -1] = newTile;
         //    changePathsCol(x);
 
-        notifyObservers();
+        notifyObserversBoard();
 
         return tempRetour;
     }
@@ -100,14 +100,14 @@ public class Board {
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
         Tile tempRetour = _board[0][y];
-        for (int i = 0; i < size-1; i++)
+        for (int i = 0; i < SIZE -1; i++)
         {
             _board[i][y] = _board[i][y+1];
         }
-        _board[size-1][y] = newTile;
+        _board[SIZE -1][y] = newTile;
         //    changePathsCol(x);
 
-        notifyObservers();
+        notifyObserversBoard();
 
         return tempRetour;
     }
@@ -117,15 +117,15 @@ public class Board {
         if (y % 2 == 1)
             throw  new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
-        Tile tempRetour = _board[size-1][y];
-        for (int i = size; i > 0; i--)
+        Tile tempRetour = _board[SIZE -1][y];
+        for (int i = SIZE; i > 0; i--)
         {
             _board[i][y] = _board[i][y-1];
         }
         _board[0][y] = newTile;
      //   changePathRow(y);
 
-        notifyObservers();
+        notifyObserversBoard();
 
         return tempRetour;
     }
@@ -162,7 +162,9 @@ public class Board {
     {
         return _board[x][y];
     }
-
+    public Tile[][] getBoard(){
+        return _board;
+    }
     /**
      * This function is used for tests
      * @return the path to test
@@ -178,20 +180,32 @@ public class Board {
     }
 
     public int getSize() {
-        return size;
+        return SIZE;
     }
 
-    public void notifyObservers() {
+    public void notifyObserversBoard() {
         for (BoardObserver obs : _observers) {
-            obs.updateBoard(this);
+            obs.updateBoard(this.getBoard());
+        }
+    }
+
+    public void notifyObserversPlayer() {
+        for (BoardObserver obs : _observers) {
+            obs.updatePlayer(this.getPlayer());
         }
     }
 
     public void addPlayer(Player player, Integer[] position) {
         _playersPositions.put(player, position);
+        notifyObserversPlayer();
+    }
+    public HashMap<Player, Integer[]> getPlayer()
+    {
+        return _playersPositions;
     }
 
     // Le joueur ne peut se déplacer que d'une case à la fois
+    /*
     public void movePlayer(Player player, Integer[] position) {
         if(!_playersPositions.containsKey(player))
             throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
@@ -201,7 +215,49 @@ public class Board {
 
         _playersPositions.put(player, position);
 
-        notifyObservers();
+        notifyObserversPlayer();
+    }
+    */
+
+    public void movePlayer(Player player, Direction direction) {
+        if(!_playersPositions.containsKey(player))
+            throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
+        Integer[] vector2 = _playersPositions.get(player);
+
+        if(vector2[0] == 0 && direction == Direction.NORTH)
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if(vector2[0] == SIZE && direction == Direction.SOUTH)
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if(vector2[1] == 0 && direction == Direction.WEST)
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if(vector2[0] == SIZE && direction == Direction.EAST)
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+
+        if (!_board[vector2[0]-1][vector2[1]].isDirectionPossible(direction))
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if (!_board[vector2[0]+1][vector2[1]].isDirectionPossible(direction))
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if (!_board[vector2[0]-1][vector2[1]+1].isDirectionPossible(direction))
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+        if (!_board[vector2[0]-1][vector2[1]-1].isDirectionPossible(direction))
+            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+
+        switch (direction)
+        {
+            case EAST ->{
+                     vector2[1]++;
+                    _playersPositions.replace(player, vector2);}
+            case WEST ->{
+                    vector2[1]--;
+                    _playersPositions.replace(player, vector2);}
+            case NORTH ->{
+                    vector2[0]--;
+                    _playersPositions.replace(player, vector2);}
+            case SOUTH ->{
+                    vector2[0]++;
+                    _playersPositions.replace(player, vector2);}
+        }
+        notifyObserversPlayer();
     }
 
     public void addObserver(BoardObserver observer) {

@@ -48,4 +48,10 @@ public class Player {
     {
         return _currentGoal;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Le joueur a "+_goalSuccessful+" succès réussi(s) et a "+_goalNotSuccessful+" succès a encore valider";
+    }
 }
