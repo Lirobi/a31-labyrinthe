@@ -14,7 +14,6 @@ public class View implements BoardObserver {
         System.out.print(message);
     }
 
-
     /**
      * @param b
      */
