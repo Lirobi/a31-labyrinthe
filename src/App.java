@@ -8,6 +8,5 @@ public class App {
         GameController game = new GameController(bd);
         LabyrinthDisplay view = new LabyrinthDisplay(game);
         bd.addObserver(view);
-        // game.initGame();
     }
 }
