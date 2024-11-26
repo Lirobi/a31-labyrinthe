@@ -79,3 +79,5 @@ fabric.properties
 
 # Compiled java
 *.class
+
+./.vscode
