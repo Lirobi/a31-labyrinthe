@@ -5,16 +5,15 @@ import java.util.List;
 
 public class Board {
 
-    private List<BoardObserver> _observers = new ArrayList<BoardObserver>();
-
+    private final List<BoardObserver> _observers = new ArrayList<>();
     private final int size = 7;
     private final Tile[][] _board = new Tile[size][size];
-    private final boolean[][][] _paths = new boolean[size][size][4];
+   // private final ArrayList<Direction>[][] _paths = new ArrayList[size][size];
 
     public Board(Tile[] setTiles)
     {
         createBoard(setTiles);
-        createPaths();
+     //   createPaths();
 
         notifyObservers();
 
@@ -26,66 +25,104 @@ public class Board {
         {
             _board[i/size][i%size] = setTiles[i];
         }
+        notifyObservers();
     }
-
+/*
     private void createPaths() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 1; j < size; j++) {
-                _paths[i][j - 1][2] = _board[i][j - 1].getForm()[2] && _board[i][j].getForm()[0];
-                _paths[i][j][0] = _board[i][j - 1].getForm()[2] && _board[i][j].getForm()[0];
-            }
-        }
-        for (int i = 1; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                _paths[j][i - 1][1] = _board[j][i - 1].getForm()[1] && _board[j][i].getForm()[3];
-                _paths[j][i][3] = _board[j][i - 1].getForm()[1] && _board[j][i].getForm()[3];
-            }
-        }
-        for (int i = 0; i < size; i++)
-            _paths[0][i][3] = false;
-        for (int i = 0; i < size; i++)
-            _paths[size-1][i][1] = false;
-        for (int i = 0; i < size; i++)
-            _paths[i][0][0] = false;
-        for (int i = 0; i < size; i++)
-            _paths[i][size-1][3] = false;
 
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                _paths[i][j] = new ArrayList<>();
+                if (i != size-1 && _board[i+1][j].isDirectionPossible(Direction.WEST) && _board[i][j].isDirectionPossible(Direction.EAST))
+                    _paths[i][j].add(Direction.EAST);
+
+                if (j != size-1 &&_board[i][j+1].isDirectionPossible(Direction.NORTH)&& _board[i][j].isDirectionPossible(Direction.SOUTH))
+                    _paths[i][j].add(Direction.SOUTH);
+
+                if (i != 0 && _board[i-1][j].isDirectionPossible(Direction.EAST)&& _board[i][j].isDirectionPossible(Direction.WEST))
+                    _paths[i][j].add(Direction.WEST);
+
+                if (j != 0 && _board[i][j-1].isDirectionPossible(Direction.SOUTH)&& _board[i][j].isDirectionPossible(Direction.NORTH))
+                    _paths[i][j].add(Direction.NORTH);
+            }
+        }
     }
+*/
 
-    // Possibilité de mutualiser le code
     public Tile changeTileCol(int x, Tile newTile)
     {
-        if (x % 2 == 0)
+        if (x % 2 == 1)
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
-        for (int i = 0; i < size - 1; i++)
+        Tile tempRetour = _board[x][size-1];
+        for (int i = size-1; i > 0; i--)
         {
-            _board[x][i] = _board[x][i+1];
+            _board[x][i] = _board[x][i-1];
         }
         _board[x][0] = newTile;
-        changePathsCol(x);
+    //    changePathsCol(x);
 
         notifyObservers();
 
-        return _board[x][size-1];
+        return tempRetour;
+    }
+
+    public Tile changeTileCol2(int x, Tile newTile)
+    {
+        if (x % 2 == 1)
+            throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
+
+        Tile tempRetour = _board[x][0];
+        for (int i = 0; i < size-1; i++)
+        {
+            _board[x][i] = _board[x][i+1];
+        }
+        _board[x][size-1] = newTile;
+        //    changePathsCol(x);
+
+        notifyObservers();
+
+        return tempRetour;
+    }
+
+    public Tile changeTileRow2(int y, Tile newTile)
+    {
+        if (y % 2 == 1)
+            throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
+
+        Tile tempRetour = _board[0][y];
+        for (int i = 0; i < size-1; i++)
+        {
+            _board[i][y] = _board[i][y+1];
+        }
+        _board[size-1][y] = newTile;
+        //    changePathsCol(x);
+
+        notifyObservers();
+
+        return tempRetour;
     }
 
     public Tile changeTileRow(int y, Tile newTile)
     {
-        if (y % 2 == 0)
+        if (y % 2 == 1)
             throw  new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
-        for (int i = 0; i < size - 1; i++)
+
+        Tile tempRetour = _board[size-1][y];
+        for (int i = size; i > 0; i--)
         {
-            _board[i][y] = _board[i][y+1];
+            _board[i][y] = _board[i][y-1];
         }
         _board[0][y] = newTile;
-        changePathRow(y);
+     //   changePathRow(y);
 
         notifyObservers();
 
-        return _board[size-1][y];
+        return tempRetour;
     }
-
+/*
     private void changePathsCol(int x)
     {
         for (int j = 1; j < size; j++) {
@@ -106,7 +143,14 @@ public class Board {
         notifyObservers();
 
     }
+*/
 
+    /**
+     *
+     * @param x for the columns
+     * @param y for the rows
+     * @return the Tile at the position (x, y) position
+     */
     public Tile getTileAtPosition(int x, int y)
     {
         return _board[x][y];
@@ -115,10 +159,15 @@ public class Board {
     /**
      * This function is used for tests
      * @return the path to test
-     */
     boolean[][][] getPaths()
     {
         return _paths;
+    }
+     */
+
+    public Boolean isAvailable(int x, int y, Direction dir)
+    {
+        return _board[x][y].isDirectionPossible(dir);
     }
 
     public int getSize() {
@@ -137,6 +186,9 @@ public class Board {
 
     public void removeObserver(BoardObserver observer) {
         _observers.remove(observer);
+    }
+    public void removeObserver(int index) {
+        _observers.remove(index);
     }
 
 }

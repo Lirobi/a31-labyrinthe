@@ -1,28 +1,31 @@
 package app.model;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class Tile {
-    private final boolean[] _form;
+    private final ArrayList<Direction> _possibleDirections = new ArrayList<>();
     private final Goal _goal;
 
-    public Tile(Goal goal, boolean[] form)
+    public Tile(Goal goal, Stack<Direction> form)
     {
-        _form = form;
+        while (!form.empty())
+            _possibleDirections.add(form.pop());
         _goal = goal;
     }
 
-    public void rotate()
-    {
-        boolean temp = _form[0];
-        _form[0] = _form[3];
-        boolean temp2 = _form[2];
-        _form[2] = _form[1];
-        _form[1] = temp;
-        _form[3] = temp2;
+    public void rotate() {
+        _possibleDirections.replaceAll(Direction::next);
     }
 
-    public boolean existGoal()
+        public boolean existGoal()
     {
         return _goal != null;
+    }
+
+    public ArrayList<Direction> getDirection()
+    {
+        return _possibleDirections;
     }
 
     public Goal getGoal()
@@ -32,14 +35,16 @@ public class Tile {
         else return null;
     }
 
-    public boolean[] getForm()
-    {
-        return _form;
-    }
-
     @Override
     public String toString()
     {
-        return _form[0] + " : " + _form[1] + " : " + _form[2] + " : " + _form[3];
+        StringBuilder str = new StringBuilder();
+        for (Direction possibleDirection : _possibleDirections){ str.append(possibleDirection.toString()); str.append(" ");}
+        return str.toString();
+    }
+
+    public boolean isDirectionPossible(Direction dir)
+    {
+        return _possibleDirections.contains(dir);
     }
 }

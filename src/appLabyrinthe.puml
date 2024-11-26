@@ -2,10 +2,7 @@
 
 package app {
     package model {
-        class Game{
-            + <<create>> Game()
-            + initGame()
-        }
+
         class Board{
             - {final} size: Integer
             - _paths: Boolean[*]
@@ -41,15 +38,15 @@ package app {
 
 
         class Tile{
-            - {final} _form: Boolean[*]
-            + <<create>> Tile(goal: Goal, form: Boolean[*])
+            + <<create>> Tile(goal: Goal, possibleDirections: Direction[*])
             + rotate()
             + existGoal(): Boolean
             + getGoal(): Goal
-            + getForm(): Boolean[*]
+            + getForm(): Direction[*]
             + toString(): String
         }
         Tile o-->"1\n- _goal" Goal: > have
+        Tile o-->"*\n- _possibleDirections" Direction: > can
 
         class TileFactory{
             + <<create>> TileFactory
@@ -64,17 +61,25 @@ package app {
         enum Goal{
             TEST
         }
+        enum Direction{
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST
+        }
         interface BoardObserver {
             + updateBoard(b: Board): void
         }
     }
     package controller {
-
+        class Game{
+            + <<create>> Game()
+            + initGame()
+        }
     }
     package view {
         class View implements app.model.BoardObserver {
-            - _board: Board
-            + <<create>> View(board: Board)
+            + <<create>> View()
             + updateBoard(b: Board):void <<overrides>>
         }
     }
@@ -91,13 +96,11 @@ class App {
 
 
 
-App --> Game: "uses"
-Game --> View: "uses"
-Game --> TileFactory: "uses"
-TileFactory --> Tile: "uses"
-Game --> Player: "uses"
-Game --> Board: "uses"
-Board --> Tile: "uses"
+Game ..> TileFactory: "uses"
+TileFactory ..> Tile: "uses"
+Board ..> Player: "uses"
+Game ..> Board: "uses"
+Board ..> Tile: "uses"
 
 
 

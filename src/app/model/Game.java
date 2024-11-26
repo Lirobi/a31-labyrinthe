@@ -1,6 +1,6 @@
 package app.model;
 
-import app.view.View;
+import app.view.LabyrinthDisplay;
 
 public class Game {
 
@@ -23,10 +23,7 @@ public class Game {
         Board bd = new Board(set);
         _currentTile = ft.createI();
 
-        View view = new View(bd);
-        bd.addObserver(view);
-
-        bd.changeTileCol(1, _currentTile);
+        _currentTile = bd.changeTileCol(1, _currentTile);
     }
 
 }

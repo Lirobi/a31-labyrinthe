@@ -3,11 +3,11 @@ package app.view;
 import app.model.BoardObserver;
 import app.model.Board;
 
-public class View implements BoardObserver {
-    private Board _board;
-    public View(Board board) {
-        _board = board;
-        _board.addObserver(this);
+import javax.swing.*;
+
+public class LabyrinthDisplay extends JFrame implements BoardObserver {
+
+    public LabyrinthDisplay() {
 
     }
     public void display(String message) {

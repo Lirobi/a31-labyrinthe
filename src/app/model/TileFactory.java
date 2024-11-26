@@ -1,5 +1,8 @@
 package app.model;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 public class TileFactory {
     public TileFactory()
     {
@@ -7,32 +10,46 @@ public class TileFactory {
     }
     public Tile createT(Goal goal)
     {
-        boolean[] form = {true, true, false, true};
-        return new Tile(goal, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.EAST);
+        directions.push(Direction.NORTH);
+        directions.push(Direction.WEST);
+        return new Tile(goal, directions);
     }
     public Tile createT()
     {
-        boolean[] form = {true, true, false, true};
-        return new Tile(null, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.EAST);
+        directions.push(Direction.NORTH);
+        directions.push(Direction.WEST);
+        return new Tile(null, directions);
     }
     public Tile createI(Goal goal)
     {
-        boolean[] form = {true, false, true, false};
-        return new Tile(goal, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.NORTH);
+        directions.push(Direction.SOUTH);
+        return new Tile(goal, directions);
     }
     public Tile createI()
     {
-        boolean[] form = {true, false, true, false};
-        return new Tile(null, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.NORTH);
+        directions.push(Direction.SOUTH);
+        return new Tile(null, directions);
     }
     public Tile createL(Goal goal)
     {
-        boolean[] form = {true, true, false, false};
-        return new Tile(goal, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.EAST);
+        directions.push(Direction.NORTH);
+        return new Tile(goal, directions);
     }
     public Tile createL()
     {
-        boolean[] form = {true, true, false, false};
-        return new Tile(null, form);
+        Stack<Direction> directions = new Stack<>();
+        directions.push(Direction.EAST);
+        directions.push(Direction.NORTH);
+        return new Tile(null, directions);
     }
 }
