@@ -6,7 +6,6 @@ import java.util.Stack;
 public class Player {
 
     private final Stack<Goal> _goalsStack;
-    private Goal _currentGoal;
     private int _goalSuccessful = 0;
     private int _goalNotSuccessful;
 
@@ -39,14 +38,14 @@ public class Player {
      */
     public void nextGoal()
     {
-        _currentGoal = _goalsStack.pop();
+        _goalsStack.pop();
         _goalSuccessful++;
         _goalNotSuccessful--;
     }
 
     public Goal getCurrentGoal()
     {
-        return _currentGoal;
+        return _goalsStack.peek();
     }
 
     @Override

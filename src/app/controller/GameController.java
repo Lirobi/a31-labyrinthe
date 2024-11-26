@@ -11,6 +11,9 @@ public class GameController {
     public GameController(Board bd)
     {
         _board = bd;
+    }
+    public void initGame()
+    {
         createGame();
     }
 
@@ -28,38 +31,34 @@ public class GameController {
         generatePlayers();
     }
 
-    private void generatePlayers() {
+        private void generatePlayers() {
 
-        Random alea = new Random();
         ArrayList<Goal> goals = new ArrayList<>(Arrays.asList(Goal.values()));
+        Collections.shuffle(goals);
 
         for(int i = 0; i < 4; i++) {
             Stack<Goal> _goals = new Stack<>();
 
-            Integer[] position = new Integer[2];
+            Vector2D position;
             switch (i) {
                 case 0 -> {
-                    position[0] = 0;
-                    position[1] = 0;
+                    position = new Vector2D(0, 0);
                 }
                 case 1 -> {
-                    position[0] = 0;
-                    position[1] = 6;
+                    position = new Vector2D(0, 6);
                 }
                 case 2 -> {
-                    position[0] = 6;
-                    position[1] = 0;
+                    position = new Vector2D(6, 0);
                 }
                 case 3 -> {
-                    position[0] = 6;
-                    position[1] = 6;
+                    position = new Vector2D(6, 6);
                 }
+                default -> position = new Vector2D(666, -666);
             }
 
             for(int j = 0; j < Goal.values().length/4; j++) {
-                int index = alea.nextInt(goals.size());
-                _goals.push((goals.get(index)));
-                goals.remove(index);
+                _goals.push((goals.getFirst()));
+                goals.removeFirst();
             }
 
             Player player = new Player(_goals);

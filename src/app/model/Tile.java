@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Tile {
+    private final String _pathImg;
     private final ArrayList<Direction> _possibleDirections = new ArrayList<>();
     private final Goal _goal;
 
-    public Tile(Goal goal, Stack<Direction> form)
+    public Tile(Goal goal, Stack<Direction> form, String path)
     {
+        _pathImg = path;
         while (!form.empty())
             _possibleDirections.add(form.pop());
         _goal = goal;
@@ -18,7 +20,7 @@ public class Tile {
         _possibleDirections.replaceAll(Direction::next);
     }
 
-        public boolean existGoal()
+    public boolean existGoal()
     {
         return _goal != null;
     }

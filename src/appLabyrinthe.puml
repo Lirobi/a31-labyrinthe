@@ -2,26 +2,38 @@
 
 package app {
     package model {
+        interface BoardObserver {
+            + updateBoard(tiles Tile[*]): void
+            + updatePlayer(<Player, Vector2D> player): void
+        }
 
         class Board{
-            - {final} size: Integer
-            - _paths: Boolean[*]
-            + <<create>> Board(setTiles Tile[*])
+            - {final} SIZE: Integer
+            + <<create>> Board()
+            + initBoard(setTiles Tile[*]);
             - createBoard(setTiles Tile[*])
-            - createPaths()
             + ChangeTileCol(x: Integer): Tile
+            + ChangeTileCol2(x: Integer): Tile
             + ChangeTileRow(y: Integer): Tile
-            - changePathsCol(x: Integer)
-            - changePathsRow(y: Integer)
-            + getTileAtPosition(x: Integer, y: Integer)
-            ~ getPaths(): Boolean[*]
+            + ChangeTileRow2(y: Integer): Tile
+            + getTileAtPosition(x: Integer, y: Integer): Tile
+            + addPlayer(player: Player, position: Vector2D)
+            + getPlayer(): <Player, Integer[]>
+            + movePlayer(player: Player, dir: Direction):
             + addObserver(observer: Observer)
             + removeObserver(observer: Observer)
-            + notifyObservers()
+            + removeObserver(Integer: index)
+            + notifyObserversBoard()
+            + notifyObserversPlayer()
             + getSize(): Integer
         }
+        Player "1" o-* "1" Vector2D
+        (Player, Vector2D) .. "*\n- m_playersPositions" Board
+
         Board o--> "*\n- _board" Tile
+        Board o--> "1\n- _lastTile" Tile
         Board o--> "*\n- _observers" BoardObserver
+
         class Player{
             - _goalSuccessful: Integer
             - _goalNotSuccessful: Integer
@@ -31,18 +43,19 @@ package app {
             + getCurrentGoal():Goal
             + getGoalSuccessful(): Integer
             + getGoalNotSuccessful(): Integer
+            + toString(): String
         }
         Player o-->"*\n- _goalStack" Goal
-        Player o--> "1\n- _currentGoal" Goal
-
-
 
         class Tile{
-            + <<create>> Tile(goal: Goal, possibleDirections: Direction[*])
+            - _pathImg: String
+            + <<create>> Tile(goal: Goal, possibleDirections: Direction[*], path: String)
             + rotate()
             + existGoal(): Boolean
             + getGoal(): Goal
-            + getForm(): Direction[*]
+            + getDirection(): Direction[*]
+            + isDirectionPossible(dir: Direction)
+            + getPath():String
             + toString(): String
         }
         Tile o-->"1\n- _goal" Goal: > have
@@ -67,41 +80,50 @@ package app {
             SOUTH,
             WEST
         }
-        interface BoardObserver {
-            + updateBoard(b: Board): void
+
+        class Vector2D
+        {
+            - _x: Integer
+            - _y: Integer
+            <<create>> Vector2D()
+            + moveLeft()
+            + moveRight()
+            + moveTop()
+            + moveBottom()
+            + getX(): Integer
+            + getY(): Integer
         }
+
     }
     package controller {
-        class Game{
-            + <<create>> Game()
+        class GameController{
+            + <<create>> GameController(bd: Board)
             + initGame()
+            + createGame()
+            + generatePlayers()
         }
+        GameController o--> "1\n - _board" app.model.Board
+        GameController o--> "1\n - _currentTile" app.model.Tile
     }
     package view {
-        class View implements app.model.BoardObserver {
-            + <<create>> View()
-            + updateBoard(b: Board):void <<overrides>>
+        class LabyrinthDisplay implements app.model.BoardObserver {
+            + <<create>> LabyrinthDisplay()
+            + display(str: String)
+            + updateBoard(tiles Tile[*]): void
+            + updatePlayer(<Player, Vector2D> player): void
         }
     }
 }
-
 
 class App {
     + {static} main(args: String[*])
 }
 
-
-
-
-
-
-
-Game ..> TileFactory: "uses"
+GameController ..> TileFactory: "uses"
+GameController ..> Player: "uses"
 TileFactory ..> Tile: "uses"
 Board ..> Player: "uses"
-Game ..> Board: "uses"
+GameController ..> Board: "uses"
 Board ..> Tile: "uses"
-
-
 
 @enduml
