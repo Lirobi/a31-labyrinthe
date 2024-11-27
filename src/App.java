@@ -9,7 +9,5 @@ public class App {
         LabyrinthDisplay view = new LabyrinthDisplay(game);
         bd.addObserver(view);
         game.initGame();
-        bd.notifyObserversBoard();
-        bd.notifyObserversPlayer();
     }
 }

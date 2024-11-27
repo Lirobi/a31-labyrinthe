@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
@@ -18,7 +17,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final JPanel _pnlBottom = new JPanel();
 
     private final int _width = 800;
-    private final int _height = 1280;
+    private final int _height = 1000;
 
 
 
@@ -50,7 +49,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlMiddle.setLayout(new GridBagLayout());
         // GENERATION DU BOARD DANS UPDATEBOARD
 
-        _pnlMiddle.setBorder(new BevelBorder(1));
         _pnlMiddle.setPreferredSize(new Dimension(_width, _width));
         
 
@@ -99,11 +97,38 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                         @Override
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g); 
-                            g.drawImage(image, 0, 0, Math.round(_width / 9), Math.round(_width / 9), null);
+                            g.drawImage(image, 0, 0, (int)Math.round(_width / 9), (int)Math.round(((double)_width) / 9), null);
                         }
                     };
-                    panel.setPreferredSize(new Dimension(Math.round(_width / 9), Math.round(_width / 9)));
+                    panel.setPreferredSize(new Dimension((int)Math.round(_width / 9), (int)Math.round(_width / 9)));
                     _pnlMiddle.add(panel, constraints);
+                }
+                if((i < 1 || i > 7) || (j < 1 || j > 7)) {
+                    if(i%2==0 && j%2==0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
+                        String buttonText = "";
+                        if(j == 0) {
+                            buttonText = ">";
+                        } else if(j == 8) {
+                            buttonText = "<";
+                        }
+
+                        if(i == 0) {
+                            buttonText = "v";
+                        } else if(i == 8) {
+                            buttonText = "^";
+                        }
+                        constraints.gridx = j;
+                        constraints.gridy = i;
+                        JPanel panel = new JPanel();
+                        JButton btn = new JButton(buttonText);
+                        btn.setBackground(Color.WHITE);
+                        btn.setBorder(null);
+                        btn.setForeground(Color.ORANGE);
+                        btn.setFont(btn.getFont().deriveFont(Font.BOLD, (float) btn.getFont().getSize() + 10));
+                        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        panel.add(btn);
+                        _pnlMiddle.add(panel, constraints);
+                    }
                 }
             }
         }
