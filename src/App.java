@@ -8,9 +8,8 @@ public class App {
         GameController game = new GameController(bd);
         LabyrinthDisplay view = new LabyrinthDisplay(game);
         bd.addObserver(view);
-<<<<<<< HEAD
-=======
         game.initGame();
->>>>>>> origin/main
+        bd.notifyObserversBoard();
+        bd.notifyObserversPlayer();
     }
 }

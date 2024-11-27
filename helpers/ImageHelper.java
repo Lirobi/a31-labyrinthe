@@ -1,3 +1,4 @@
+package app.view;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.AlphaComposite;
