@@ -79,7 +79,8 @@ fabric.properties
 
 # Compiled java
 *.class
-
-./.vscode./.idea
 *.psd
+
+./.vscode
+./.idea
 .DS_Store
