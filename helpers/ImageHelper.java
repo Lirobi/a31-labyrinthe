@@ -1,12 +1,8 @@
-package app.view;
-
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  * Set of static functions allowing to manipulate images
