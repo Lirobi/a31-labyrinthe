@@ -50,9 +50,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlMiddle.setLayout(new GridBagLayout());
         // GENERATION DU BOARD DANS UPDATEBOARD
 
-        _pnlMiddle.setPreferredSize(new Dimension(_width, _width));
-        
-
+        _pnlMiddle.setMinimumSize(new Dimension((int) getSize().getWidth(), (int) getSize().getWidth()));
 
 
         _pnlBottom.setLayout(new BorderLayout());
