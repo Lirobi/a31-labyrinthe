@@ -1,9 +1,8 @@
 package app.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
 
 public class Board {
 
@@ -123,6 +122,7 @@ public class Board {
     public void setAloneTile(Tile tile)
     {
         aloneTile = tile;
+        notifyObserversTile();
     }
 
     public void notifyObserversBoard() {
