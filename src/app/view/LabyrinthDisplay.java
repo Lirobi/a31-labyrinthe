@@ -1,14 +1,13 @@
 package app.view;
 
 import app.controller.GameController;
+import app.helpers.ImageHelper;
 import app.model.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
-
-import app.helpers.ImageHelper;
 
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
