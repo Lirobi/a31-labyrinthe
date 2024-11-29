@@ -6,4 +6,5 @@ import java.util.Vector;
 public interface BoardObserver {
     void updateBoard(Tile[][] tiles);
     void updatePlayer(HashMap<Player, Vector2D> player);
+    void updateTile(Tile tile);
 }

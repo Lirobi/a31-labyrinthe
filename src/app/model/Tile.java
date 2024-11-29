@@ -49,4 +49,9 @@ public class Tile {
     {
         return _possibleDirections.contains(dir);
     }
+
+    public String getPathImg()
+    {
+        return _pathImg;
+    }
 }

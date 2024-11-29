@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
+import app.helpers.ImageHelper;
+
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
     private final JPanel _pnlContentPane = new JPanel();
@@ -205,5 +207,11 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
             display(entry.getKey().toString());
             display("Le joueur est à la position (" + entry.getValue().getX() + "," + entry.getValue().getY()+")");
         }
+    }
+
+    @Override
+    public void updateTile(Tile tile)
+    {
+        // quand la tuile seule fait une rotation
     }
 }

@@ -5,7 +5,8 @@ import java.util.*;
 
 public class GameController {
     private final Board _board;
-    private Tile _currentTile;
+    private final Player[] _players = new Player[4];
+    private Integer _currentPlayer;
 
     public GameController(Board bd)
     {
@@ -21,7 +22,7 @@ public class GameController {
         Tile[] set = new Tile[49];
         TileFactory ft = new TileFactory();
         
-        // Pour l'instant, toutes les tuiles I sont les tuiles qui seront dans le futur aléatoires, le reste sont fixes.
+        // Pour l'instant, toutes les tuiles I sont les tuiles qui seront dans le futur aléatoire, le reste sont fixes.
 
         set[0] = ft.createL();
         set[1] = ft.createI();
@@ -105,8 +106,6 @@ public class GameController {
 
         
         _board.initBoard(set);
-        _currentTile = ft.createI();
-
         generatePlayers();
     }
 
@@ -141,7 +140,43 @@ public class GameController {
             }
 
             Player player = new Player(_goals);
+            _players[i] = player;
             _board.addPlayer(player, position);
+        }
+    }
+    public void rotateLeft()
+    {
+        _board.getAloneTile().rotate();
+    }
+    public void rotateRight()
+    {
+        _board.getAloneTile().rotate();
+        _board.getAloneTile().rotate();
+        _board.getAloneTile().rotate();
+    }
+    public void pushCardsOnBoard(Direction dir, int numColOrRow)
+    {
+        Tile temp =
+        switch (dir)
+        {
+            case EAST -> _board.changeByEast(numColOrRow, _board.getAloneTile());
+            case NORTH -> _board.changeByNorth(numColOrRow, _board.getAloneTile());
+            case WEST -> _board.changeByWest(numColOrRow, _board.getAloneTile());
+            case SOUTH -> _board.changeBySouth(numColOrRow, _board.getAloneTile());
+        };
+        _board.setAloneTile(temp);
+    }
+    public void movePlayer(Direction direction)
+    {
+        _board.movePlayer(_players[_currentPlayer], direction);
+    }
+    public void endTurn() {
+        if (!_players[_currentPlayer].isRestGoal())
+            System.exit(0);
+        else {
+            _currentPlayer++;
+            if (_currentPlayer == 4)
+                _currentPlayer = 0;
         }
     }
 }
