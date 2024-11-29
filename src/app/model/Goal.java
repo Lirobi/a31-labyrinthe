@@ -24,7 +24,7 @@ public enum Goal
     GRIFFIN,
     GOBLIN,
     MINOTAUR,
-    LICORN,
+    UNICORN,
     PHOENIX,
     TROLL
 }

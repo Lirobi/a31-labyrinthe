@@ -1,6 +1,5 @@
 package app.model;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class Player {
@@ -13,12 +12,7 @@ public class Player {
     {
         _goalNotSuccessful = goals.size();
         _goalsStack = goals;
-        /*
-        while (goals.size() != 0) {
-            _goalsStack.push(goals.get(0));
-            goals.remove(0);
-        }
-        */
+
     }
     public int getGoalSuccessful()
     {

@@ -3,7 +3,6 @@ package app.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Vector;
 
 public class Board {
 
@@ -36,71 +35,62 @@ public class Board {
         notifyObserversBoard();
     }
 
-    public Tile changeByNorth(int x, Tile newTile)
+    public Tile changeByDirection(Direction dir, int numRowCol, Tile newTile)
     {
-        if (x % 2 == 1)
+        if (numRowCol % 2 == 0)
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
-        Tile tempRetour = _board[x][SIZE -1];
+        Tile tempRetour = switch (dir){
+            case NORTH -> changeByNorth(numRowCol, newTile);
+            case EAST -> changeByEast(numRowCol, newTile);
+            case SOUTH -> changeBySouth(numRowCol, newTile);
+            case WEST -> changeByWest(numRowCol, newTile);
+        };
+        notifyObserversBoard();
+        return tempRetour;
+    }
+
+    private Tile changeByNorth(int numCol, Tile newTile)
+    {
+        Tile tempRetour = _board[numCol][SIZE -1];
         for (int i = SIZE -1; i > 0; i--)
         {
-            _board[x][i] = _board[x][i-1];
+            _board[numCol][i] = _board[numCol][i-1];
         }
-        _board[x][0] = newTile;
-
-        notifyObserversBoard();
-
+        _board[numCol][0] = newTile;
         return tempRetour;
     }
 
-    public Tile changeBySouth(int x, Tile newTile)
+    private Tile changeBySouth(int numCol, Tile newTile)
     {
-        if (x % 2 == 1)
-            throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
-
-        Tile tempRetour = _board[x][0];
+        Tile tempRetour = _board[numCol][0];
         for (int i = 0; i < SIZE -1; i++)
         {
-            _board[x][i] = _board[x][i+1];
+            _board[numCol][i] = _board[numCol][i+1];
         }
-        _board[x][SIZE -1] = newTile;
-
-        notifyObserversBoard();
-
+        _board[numCol][SIZE -1] = newTile;
         return tempRetour;
     }
 
-    public Tile changeByEast(int y, Tile newTile)
+    private Tile changeByEast(int numRow, Tile newTile)
     {
-        if (y % 2 == 1)
-            throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
-
-        Tile tempRetour = _board[0][y];
+        Tile tempRetour = _board[0][numRow];
         for (int i = 0; i < SIZE -1; i++)
         {
-            _board[i][y] = _board[i][y+1];
+            _board[i][numRow] = _board[i][numRow+1];
         }
-        _board[SIZE -1][y] = newTile;
-
-        notifyObserversBoard();
-
+        _board[SIZE -1][numRow] = newTile;
         return tempRetour;
     }
 
-    public Tile changeByWest(int y, Tile newTile)
+    private Tile changeByWest(int numRow, Tile newTile)
     {
-        if (y % 2 == 1)
-            throw  new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
-
-        Tile tempRetour = _board[SIZE -1][y];
+        Tile tempRetour = _board[SIZE -1][numRow];
         for (int i = SIZE; i > 0; i--)
         {
-            _board[i][y] = _board[i][y-1];
+            _board[i][numRow] = _board[i][numRow-1];
         }
-        _board[0][y] = newTile;
-
-        notifyObserversBoard();
-
+        _board[0][numRow] = newTile;
         return tempRetour;
     }
 

@@ -119,18 +119,10 @@ public class GameController {
 
             Vector2D position;
             switch (i) {
-                case 0 -> {
-                    position = new Vector2D(0, 0);
-                }
-                case 1 -> {
-                    position = new Vector2D(0, 6);
-                }
-                case 2 -> {
-                    position = new Vector2D(6, 0);
-                }
-                case 3 -> {
-                    position = new Vector2D(6, 6);
-                }
+                case 0 -> position = new Vector2D(0, 0);
+                case 1 -> position = new Vector2D(0, 6);
+                case 2 -> position = new Vector2D(6, 0);
+                case 3 -> position = new Vector2D(6, 6);
                 default -> position = new Vector2D(666, -666);
             }
 
@@ -156,15 +148,7 @@ public class GameController {
     }
     public void pushCardsOnBoard(Direction dir, int numColOrRow)
     {
-        Tile temp =
-        switch (dir)
-        {
-            case EAST -> _board.changeByEast(numColOrRow, _board.getAloneTile());
-            case NORTH -> _board.changeByNorth(numColOrRow, _board.getAloneTile());
-            case WEST -> _board.changeByWest(numColOrRow, _board.getAloneTile());
-            case SOUTH -> _board.changeBySouth(numColOrRow, _board.getAloneTile());
-        };
-        _board.setAloneTile(temp);
+        _board.setAloneTile(_board.changeByDirection(dir, numColOrRow, _board.getAloneTile()));
     }
     public void movePlayer(Direction direction)
     {
