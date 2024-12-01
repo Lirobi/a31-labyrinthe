@@ -23,6 +23,7 @@ public class Board {
         notifyObserversBoard();
         TileFactory ft = new TileFactory();
         _aloneTile = ft.createI();
+        notifyObserversTile();
     }
 
     private void createBoard(Tile[] setTiles)
@@ -140,7 +141,7 @@ public class Board {
 
 
 
-    public void rotate()
+    public void rotateAloneTile()
     {
         _aloneTile.rotate();
         notifyObserversTile();
