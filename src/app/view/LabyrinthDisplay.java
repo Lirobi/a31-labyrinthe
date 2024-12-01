@@ -4,9 +4,13 @@ import app.controller.GameController;
 import app.helpers.ImageHelper;
 import app.model.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
@@ -23,7 +27,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     public LabyrinthDisplay(GameController controller) {
         super("Labyrinthe");
         setSize(WIDTH, HEIGHT);
-
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         
         // Initialisation de la fenêtre
@@ -72,61 +77,52 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     public void display(String message) {
         System.out.println(message);
     }
-   public Image getTileImage(Tile tile) {
-        String path = "./assets/images/";
-        Image image = null;
+    
+    public BufferedImage getTileImage(Tile tile) {
+        String path = tile.getPathImg();
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            System.err.println("Error: Unable to load image from resource.");
+            e.printStackTrace();
+        }
 
         ArrayList<Direction> direction = tile.getDirection();
 
-        if(direction.size() == 3) { // La tile T est la seule a avoir 3 directions
-            path += "tile_T.png";
-            image = new ImageIcon(path).getImage();
-
+        if(tile.getPathImg().contains("T")) {
             if(!direction.contains(Direction.SOUTH)) {
-                image = ImageHelper.rotate(ImageHelper.toBufferedImage(image), Math.PI);
+                image = ImageHelper.rotate(image, Math.PI);
             }
             else if(!direction.contains(Direction.EAST)) {
-                image = ImageHelper.rotateClockwise(ImageHelper.toBufferedImage(image));
+                image = ImageHelper.rotateClockwise(image);
             }
             else if(!direction.contains(Direction.WEST)) {
-                image = ImageHelper.rotateCounterClockwise(ImageHelper.toBufferedImage(image));
+                image = ImageHelper.rotateCounterClockwise(image);
             }
-
-
         }
-        else {
-            // Si la direction est une ligne droite alors c'est un I
-            if(direction.contains(Direction.NORTH) && direction.contains(Direction.SOUTH) || direction.contains(Direction.EAST) && direction.contains(Direction.WEST)) {
-                path += "tile_I.png";
-                image = new ImageIcon(path).getImage();
-                
-
-
-                // Si la direction est a l'horizontale, alors il faut faire pivoter l'image
-                if(direction.contains(Direction.EAST)) {
-                    image = ImageHelper.rotateClockwise(ImageHelper.toBufferedImage(image));
-                }
-
-
-            } 
-            // Sinon, c'est forcément un L
-            else {
-                path += "tile_L.png";
-                image = new ImageIcon(path).getImage();
-                
-                if(direction.contains(Direction.WEST)) {
-                    if(direction.contains(Direction.SOUTH)) {
-                        image = ImageHelper.rotateClockwise(ImageHelper.toBufferedImage(image));
-                    } 
-                    else {
-                        image = ImageHelper.rotate(ImageHelper.toBufferedImage(image), Math.PI);
-                    }
-                }
-                else if(direction.contains(Direction.EAST) && direction.contains(Direction.NORTH)) {
-                    image = ImageHelper.rotateCounterClockwise(ImageHelper.toBufferedImage(image));
-                }
-                
+        else if(path.contains("I")) {
+            // Si la direction est a l'horizontale, alors il faut faire pivoter l'image
+            if(direction.contains(Direction.EAST)) {
+                image = ImageHelper.rotateClockwise(image);
             }
+        } 
+        else {
+            if(direction.contains(Direction.WEST)) {
+                if(direction.contains(Direction.SOUTH)) {
+                    image = ImageHelper.rotateClockwise(image);
+                } 
+                else {
+                    image = ImageHelper.rotate(image, Math.PI);
+                }
+            }
+            else if(direction.contains(Direction.EAST) && direction.contains(Direction.NORTH)) {
+                image = ImageHelper.rotateCounterClockwise(image);
+            }
+            
+        }
+        if (image == null) {
+            System.err.println("Error: Unable to load image at path: " + path);
         }
 
         return image;
@@ -137,51 +133,42 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     @Override
     public void updateBoard(Tile[][] tiles) {
         GridBagConstraints constraints = new GridBagConstraints();
+        _pnlMiddle.removeAll(); // Clear the panel before adding new components
         for(int i = 0; i < 9; i++) {
             for(int j = 0; j < 9; j++) {
-
-                // Partie des tiles
-                if(i >= 1 && i <= 7 && j >= 1 && j <= 7) {
-                    constraints.gridx = j;
-                    constraints.gridy = i;
-                    Image image = getTileImage(tiles[i - 1][j - 1]);
-
-                    JPanel panel = new JPanel() {  
-                        @Override
-                        protected void paintComponent(Graphics g) {
-                            super.paintComponent(g); 
-                            g.drawImage(image, 0, 0, (int)Math.round(WIDTH / 9), (int)Math.round(((double)WIDTH) / 9), null);
-                        }
-                    };
-                    panel.setPreferredSize(new Dimension((int)Math.round(WIDTH / 9), (int)Math.round(WIDTH / 9)));
-                    _pnlMiddle.add(panel, constraints);
-                }
+                constraints.gridx = j;
+                constraints.gridy = i;
                 if((i < 1 || i > 7) || (j < 1 || j > 7)) {
-                    if(i%2==0 && j%2==0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
+                    if(i % 2 == 0 && j % 2 == 0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
                         String buttonText = "";
                         if(j == 0) {
                             buttonText = ">";
                         } else if(j == 8) {
                             buttonText = "<";
                         }
-
+    
                         if(i == 0) {
                             buttonText = "v";
                         } else if(i == 8) {
                             buttonText = "^";
                         }
-                        constraints.gridx = j;
-                        constraints.gridy = i;
-                        JPanel panel = new JPanel();
-                        JButton btn = new JButton(buttonText);
-                        btn.setBackground(Color.WHITE);
-                        btn.setBorder(null);
-                        btn.setForeground(Color.ORANGE);
-                        btn.setFont(btn.getFont().deriveFont(Font.BOLD, (float) btn.getFont().getSize() + 10));
-                        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        panel.add(btn);
-                        _pnlMiddle.add(panel, constraints);
+    
+                        JButton button = new JButton(buttonText);
+                        _pnlMiddle.add(button, constraints);
                     }
+                } else {
+                    BufferedImage image = getTileImage(tiles[i - 1][j - 1]);
+    
+                    JPanel panel = new JPanel() {  
+                        @Override
+                        protected void paintComponent(Graphics g) {
+                            super.paintComponent(g); 
+                            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                            
+                        }
+                    };
+                    panel.setPreferredSize(new Dimension(getWidth() / 9, getWidth() / 9));
+                    _pnlMiddle.add(panel, constraints);
                 }
             }
         }

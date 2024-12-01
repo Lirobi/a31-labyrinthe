@@ -3,6 +3,7 @@
 import java.util.Stack;
 
 public class TileFactory {
+    private String path = "./assets/images/";
     public TileFactory()
     {
 
@@ -13,7 +14,7 @@ public class TileFactory {
         directions.push(Direction.WEST);
         directions.push(Direction.SOUTH);
         directions.push(Direction.EAST);
-        return new Tile(goal, directions, "");
+        return new Tile(goal, directions, path + "tile_T.png");
     }
     public Tile createT()
     {
@@ -21,34 +22,34 @@ public class TileFactory {
         directions.push(Direction.WEST);
         directions.push(Direction.SOUTH);
         directions.push(Direction.EAST);
-        return new Tile(null, directions, "");
+        return new Tile(null, directions, path + "tile_T.png");
     }
     public Tile createI(Goal goal)
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.NORTH);
         directions.push(Direction.SOUTH);
-        return new Tile(goal, directions, "");
+        return new Tile(goal, directions, path + "tile_I.png");
     }
     public Tile createI()
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.NORTH);
         directions.push(Direction.SOUTH);
-        return new Tile(null, directions, "");
+        return new Tile(null, directions, path + "tile_I.png");
     }
     public Tile createL(Goal goal)
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.SOUTH);
         directions.push(Direction.EAST);
-        return new Tile(goal, directions, "");
+        return new Tile(goal, directions, path + "tile_L.png");
     }
     public Tile createL()
     {
         Stack<Direction> directions = new Stack<>();
         directions.push(Direction.SOUTH);
         directions.push(Direction.EAST);
-        return new Tile(null, directions, "");
+        return new Tile(null, directions, path + "tile_L.png");
     }
 }

@@ -134,7 +134,7 @@ public class Board {
     }
     public void notifyObserversTile() {
         for (BoardObserver obs : _observers) {
-            obs.updateTile(this._getAloneTile());
+            obs.updateTile(this.getAloneTile());
         }
     }
 
