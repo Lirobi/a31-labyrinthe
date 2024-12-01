@@ -14,19 +14,12 @@ public class GameController {
     }
     public void initGame()
     {
-        createGame();
-    }
-
-    public void createGame()
-    {
-        
-        
         _board.initBoard(generateBoard());
         generatePlayers();
     }
 
-        private void generatePlayers() {
-
+    private void generatePlayers() 
+    {
         ArrayList<Goal> goals = new ArrayList<>(Arrays.asList(Goal.values()));
         Collections.shuffle(goals);
 
@@ -52,34 +45,6 @@ public class GameController {
             _board.addPlayer(player, position);
         }
     }
-    public void rotateLeft()
-    {
-        _board.getAloneTile().rotate();
-    }
-    public void rotateRight()
-    {
-        _board.getAloneTile().rotate();
-        _board.getAloneTile().rotate();
-        _board.getAloneTile().rotate();
-    }
-    public void pushCardsOnBoard(Direction dir, int numColOrRow)
-    {
-        _board.setAloneTile(_board.changeByDirection(dir, numColOrRow, _board.getAloneTile()));
-    }
-    public void movePlayer(Direction direction)
-    {
-        _board.movePlayer(_players[_currentPlayer], direction);
-    }
-    public void endTurn() {
-        if (!_players[_currentPlayer].isRestGoal())
-            System.exit(0);
-        else {
-            _currentPlayer++;
-            if (_currentPlayer == 4)
-                _currentPlayer = 0;
-        }
-    }
-
 
     private Tile[] generateBoard() {
         Tile[] set = new Tile[49];
@@ -156,4 +121,35 @@ public class GameController {
     
         return set;
     }
+
+    public void rotateLeft()
+    {
+        _board.getAloneTile().rotate();
+    }
+    public void rotateRight()
+    {
+        _board.getAloneTile().rotate();
+        _board.getAloneTile().rotate();
+        _board.getAloneTile().rotate();
+    }
+    public void pushCardsOnBoard(Direction dir, int numRowCol)
+    {
+        _board.setAloneTile(_board.changeByDirection(dir, numRowCol, _board.getAloneTile()));
+    }
+    public void movePlayer(Direction direction)
+    {
+        _board.movePlayer(_players[_currentPlayer], direction);
+    }
+    public void endTurn() {
+        if (!_players[_currentPlayer].isRestGoal())
+            System.exit(0);
+        else {
+            _currentPlayer++;
+            if (_currentPlayer == 4)
+                _currentPlayer = 0;
+        }
+    }
+
+
+
 }

@@ -72,8 +72,6 @@ public class ImageHelper {
 		return rotate( original, 1.5*Math.PI );
 	}
 
-
-
 	/**
 	 * Converts a given Image into a BufferedImage
 	 *

@@ -3,8 +3,9 @@
 package app {
     package model {
         interface BoardObserver {
-            + updateBoard(tiles Tile[*]): void
-            + updatePlayer(<Player, Vector2D> player): void
+            + updateBoard(tiles Tile[*])
+            + updatePlayer(<Player, Vector2D> player)
+            + updateTile(tile: Tile);
         }
 
         class Board{
@@ -12,54 +13,63 @@ package app {
             + <<create>> Board()
             + initBoard(setTiles Tile[*]);
             - createBoard(setTiles Tile[*])
-            + ChangeTileCol(x: Integer): Tile
-            + ChangeTileCol2(x: Integer): Tile
-            + ChangeTileRow(y: Integer): Tile
-            + ChangeTileRow2(y: Integer): Tile
-            + getTileAtPosition(x: Integer, y: Integer): Tile
+            + changeByDirection(dir: Direction, numRowCol: Integer, newTile: Tile): Tile
+            - changeByNorth(numCol: Integer, newTile Tile): Tile
+            - changeBySouth(numCol: Integer, newTile Tile): Tile
+            - changeByEast(numRow: Integer, newTile Tile): Tile
+            - changeByWest(numRow: Integer, newTile Tile): Tile
+
             + addPlayer(player: Player, position: Vector2D)
+            + getTileAtPosition(x: Integer, y: Integer): Tile
+            + getBoard(): Tile[*]
             + getPlayer(): <Player, Integer[]>
-            + movePlayer(player: Player, dir: Direction):
+            + getSize(): Integer
+            + getAloneTile(): Tile
+            + setAloneTile(tile: Tile)
+
+            + notifyObserversBoard()
+            + notifyObserversPlayer()
+            + notifyObserversTile()
+
+            + rotate()
+            + movePlayer(player: Player, direction: Direction):
             + addObserver(observer: Observer)
             + removeObserver(observer: Observer)
             + removeObserver(Integer: index)
-            + notifyObserversBoard()
-            + notifyObserversPlayer()
-            + getSize(): Integer
         }
         Player "1" o-* "1" Vector2D
-        (Player, Vector2D) .. "*\n- m_playersPositions" Board
+        (Player, Vector2D) .. Board: *\n- _playersPositions
 
-        Board o--> "*\n- _board" Tile
-        Board o--> "1\n- _lastTile" Tile
-        Board o--> "*\n- _observers" BoardObserver
+        Board o--> "*\n- _board" Tile: > is composed of
+        Board o--> "1\n- _aloneTile" Tile: > have
+        Board o--> "*\n- _observers" BoardObserver: > is observed by
 
         class Player{
             - _goalSuccessful: Integer
             - _goalNotSuccessful: Integer
             + <<create>> Player(goals: Goal[*])
+            + getGoalSuccessful(): Integer
+            + getGoalNotSuccessful(): Integer
             + isRestGoal(): Boolean
             + nextGoal()
             + getCurrentGoal():Goal
-            + getGoalSuccessful(): Integer
-            + getGoalNotSuccessful(): Integer
             + toString(): String
         }
-        Player o-->"*\n- _goalStack" Goal
+        Player o-->"*\n- _goalStack" Goal: > the stack of goals 
 
         class Tile{
             - _pathImg: String
-            + <<create>> Tile(goal: Goal, possibleDirections: Direction[*], path: String)
+            + <<create>> Tile(goal: Goal, form: Direction[*], path: String)
             + rotate()
             + existGoal(): Boolean
-            + getGoal(): Goal
             + getDirection(): Direction[*]
-            + isDirectionPossible(dir: Direction)
+            + getGoal(): Goal
+            + isDirectionPossible(dir: Direction): Boolean
             + getPath():String
             + toString(): String
         }
         Tile o-->"1\n- _goal" Goal: > have
-        Tile o-->"*\n- _possibleDirections" Direction: > can
+        Tile o-->"*\n- _possibleDirections" Direction: > can move 
 
         class TileFactory{
             + <<create>> TileFactory
@@ -72,7 +82,31 @@ package app {
         }
 
         enum Goal{
-            TEST
+            WITCH_HAT,
+            KEY,
+            RING,
+            CHANDELIER,
+            TREASURE_MAP,
+            CROWN,
+            SWORD,
+            SPELL_BOOK,
+            MAGIC_WAND,
+            SHIELD,
+            MAGIC_POTION,
+            TREASURE_CHEST,
+            GHOST,
+            DRAGON,
+            BAT,
+            SPIDER,
+            GNOME,
+            FAIRY,
+            SKELETON,
+            GRIFFIN,
+            GOBLIN,
+            MINOTAUR,
+            UNICORN,
+            PHOENIX,
+            TROLL
         }
         enum Direction{
             NORTH,
@@ -85,7 +119,7 @@ package app {
         {
             - _x: Integer
             - _y: Integer
-            <<create>> Vector2D()
+            + <<create>> Vector2D()
             + moveLeft()
             + moveRight()
             + moveTop()
@@ -95,22 +129,50 @@ package app {
         }
 
     }
-    package controller {
-        class GameController{
+    package controller 
+    {
+        class GameController
+        {
+            - _currentPlayer: Integer
             + <<create>> GameController(bd: Board)
             + initGame()
-            + createGame()
-            + generatePlayers()
+            - generatePlayers()
+            - generateBoard(): Tile[*]
+            + rotateLeft()
+            + rotateRight()
+            + pushCardsOnBoard(dir: Direction, numRowCol)
+            + movePlayer(direction: Direction)
+            + endTurn()
         }
-        GameController o--> "1\n - _board" app.model.Board
-        GameController o--> "1\n - _currentTile" app.model.Tile
+        GameController o--> "1\n - _board" app.model.Board: > controlle
+        GameController *--> "*\n - _players" app.model.Player: > create 
     }
-    package view {
-        class LabyrinthDisplay implements app.model.BoardObserver {
-            + <<create>> LabyrinthDisplay()
+
+    package view 
+    {
+        class LabyrinthDisplay implements app.model.BoardObserver
+        {
+            - {final} WIDTH: Integer
+            - {final} HEIGHT: Integer
+            + <<create>> LabyrinthDisplay(controller: GameController)
             + display(str: String)
+            + getTileImage(tile: Tile): Image
             + updateBoard(tiles Tile[*]): void
             + updatePlayer(<Player, Vector2D> player): void
+            + updateTile(tile: Tile)
+        }
+    }
+
+    LabyrinthDisplay ..> helpers.ImageHelper: <<uses>>
+
+    package helpers{
+        class ImageHelper
+        {
+            + {static} merge(backgroundPath: String, foregroundPaths: String): BufferedImage
+            + {static} rotate(original: final BufferedImage, angle: Float): 
+            + {static} rotateClockwise(original: final BufferedImage): 
+            + {static} rotateCounterClockwise(original: final BufferedImage): 
+            + {static} toBufferedImage(img: Image): BufferedImage 
         }
     }
 }
@@ -119,11 +181,21 @@ class App {
     + {static} main(args: String[*])
 }
 
-GameController ..> TileFactory: "uses"
-GameController ..> Player: "uses"
-TileFactory ..> Tile: "uses"
-Board ..> Player: "uses"
-GameController ..> Board: "uses"
-Board ..> Tile: "uses"
+TileFactory ..> Tile: <<create>>
+Board ..> Direction: <<uses>>
+Board ..> Player: <<uses>>
+Board ..> Tile: <<uses>>
+GameController ..> TileFactory: <<uses>>
+GameController ..> Player: <<create>>
+GameController ..> Board: <<uses>>
+GameController ..> Direction: <<uses>>
+GameController ..> Goal: <<uses>>
+LabyrinthDisplay ..> Tile: <<uses>>
+LabyrinthDisplay ..> Goal: <<uses>>
+LabyrinthDisplay ..> Player: <<uses>>
+LabyrinthDisplay ..> Vector2D: <<uses>>
+App ..> app.model.Board: <<uses>>
+App ..> app.controller.GameController: <<uses>>
+App ..> app.view.LabyrinthDisplay: <<uses>>
 
 @enduml

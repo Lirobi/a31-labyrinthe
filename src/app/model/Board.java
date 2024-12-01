@@ -2,20 +2,16 @@ package app.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-<<<<<<< HEAD
-=======
 import java.util.List;
->>>>>>> dda7a8c822233f7f65e08ad15445c1903945acda
 
 public class Board {
 
     private final List<BoardObserver> _observers = new ArrayList<>();
 
     private final HashMap<Player, Vector2D> _playersPositions = new HashMap<>();
-    private Tile aloneTile;
+    private Tile _aloneTile;
     private final int SIZE = 7;
     private final Tile[][] _board = new Tile[SIZE][SIZE];
-   // private final ArrayList<Direction>[][] _paths = new ArrayList[size][size];
 
     public Board()
     {
@@ -26,7 +22,7 @@ public class Board {
         createBoard(setTiles);
         notifyObserversBoard();
         TileFactory ft = new TileFactory();
-        aloneTile = ft.createI();
+        _aloneTile = ft.createI();
     }
 
     private void createBoard(Tile[] setTiles)
@@ -96,6 +92,10 @@ public class Board {
         _board[0][numRow] = newTile;
         return tempRetour;
     }
+    public void addPlayer(Player player, Vector2D position) {
+        _playersPositions.put(player, position);
+        notifyObserversPlayer();
+    }
 
     public Tile getTileAtPosition(int x, int y)
     {
@@ -104,18 +104,20 @@ public class Board {
     public Tile[][] getBoard(){
         return _board;
     }
-
+    public HashMap<Player, Vector2D> getPlayer()
+    {
+        return _playersPositions;
+    }
     public int getSize() {
         return SIZE;
     }
-
     public Tile getAloneTile()
     {
-        return aloneTile;
+        return _aloneTile;
     }
     public void setAloneTile(Tile tile)
     {
-        aloneTile = tile;
+        _aloneTile = tile;
         notifyObserversTile();
     }
 
@@ -132,21 +134,15 @@ public class Board {
     }
     public void notifyObserversTile() {
         for (BoardObserver obs : _observers) {
-            obs.updateTile(this.getAloneTile());
+            obs.updateTile(this._getAloneTile());
         }
     }
 
-    public void addPlayer(Player player, Vector2D position) {
-        _playersPositions.put(player, position);
-        notifyObserversPlayer();
-    }
-    public HashMap<Player, Vector2D> getPlayer()
-    {
-        return _playersPositions;
-    }
+
+
     public void rotate()
     {
-        aloneTile.rotate();
+        _aloneTile.rotate();
         notifyObserversTile();
     }
 

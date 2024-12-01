@@ -1,4 +1,4 @@
-package app.model;
+    package app.model;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -37,14 +37,6 @@ public class Tile {
         else return null;
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuilder str = new StringBuilder();
-        for (Direction possibleDirection : _possibleDirections){ str.append(possibleDirection.toString()); str.append(" ");}
-        return str.toString();
-    }
-
     public boolean isDirectionPossible(Direction dir)
     {
         return _possibleDirections.contains(dir);
@@ -53,5 +45,13 @@ public class Tile {
     public String getPathImg()
     {
         return _pathImg;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder str = new StringBuilder();
+        for (Direction possibleDirection : _possibleDirections){ str.append(possibleDirection.toString()); str.append(" ");}
+        return str.toString();
     }
 }

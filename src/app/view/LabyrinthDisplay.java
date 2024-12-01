@@ -17,16 +17,12 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final JPanel _pnlMiddle = new JPanel();
     private final JPanel _pnlBottom = new JPanel();
 
-    private final int _width = 800;
-    private final int _height = 1000;
-
-
+    private final int WIDTH = 800;
+    private final int HEIGHT = 1000;
 
     public LabyrinthDisplay(GameController controller) {
         super("Labyrinthe");
-        setSize(_width, _height);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        setSize(WIDTH, HEIGHT);
 
 
         
@@ -76,67 +72,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     public void display(String message) {
         System.out.println(message);
     }
-
-    /**
-     * @param tiles is a tab
-     */
-    @Override
-    public void updateBoard(Tile[][] tiles) {
-        GridBagConstraints constraints = new GridBagConstraints();
-        for(int i = 0; i < 9; i++) {
-            for(int j = 0; j < 9; j++) {
-
-                // Partie des tiles
-                if(i >= 1 && i <= 7 && j >= 1 && j <= 7) {
-                    constraints.gridx = j;
-                    constraints.gridy = i;
-                    Image image = getTileImage(tiles[i - 1][j - 1]);
-
-                    JPanel panel = new JPanel() {  
-                        @Override
-                        protected void paintComponent(Graphics g) {
-                            super.paintComponent(g); 
-                            g.drawImage(image, 0, 0, (int)Math.round(_width / 9), (int)Math.round(((double)_width) / 9), null);
-                        }
-                    };
-                    panel.setPreferredSize(new Dimension((int)Math.round(_width / 9), (int)Math.round(_width / 9)));
-                    _pnlMiddle.add(panel, constraints);
-                }
-                if((i < 1 || i > 7) || (j < 1 || j > 7)) {
-                    if(i%2==0 && j%2==0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
-                        String buttonText = "";
-                        if(j == 0) {
-                            buttonText = ">";
-                        } else if(j == 8) {
-                            buttonText = "<";
-                        }
-
-                        if(i == 0) {
-                            buttonText = "v";
-                        } else if(i == 8) {
-                            buttonText = "^";
-                        }
-                        constraints.gridx = j;
-                        constraints.gridy = i;
-                        JPanel panel = new JPanel();
-                        JButton btn = new JButton(buttonText);
-                        btn.setBackground(Color.WHITE);
-                        btn.setBorder(null);
-                        btn.setForeground(Color.ORANGE);
-                        btn.setFont(btn.getFont().deriveFont(Font.BOLD, (float) btn.getFont().getSize() + 10));
-                        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        panel.add(btn);
-                        _pnlMiddle.add(panel, constraints);
-                    }
-                }
-            }
-        }
-        _pnlMiddle.revalidate();
-        _pnlMiddle.repaint();
-    }
-
-
-    public Image getTileImage(Tile tile) {
+   public Image getTileImage(Tile tile) {
         String path = "./assets/images/";
         Image image = null;
 
@@ -194,6 +130,63 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         }
 
         return image;
+    }
+    /**
+     * @param tiles is a tab
+     */
+    @Override
+    public void updateBoard(Tile[][] tiles) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+
+                // Partie des tiles
+                if(i >= 1 && i <= 7 && j >= 1 && j <= 7) {
+                    constraints.gridx = j;
+                    constraints.gridy = i;
+                    Image image = getTileImage(tiles[i - 1][j - 1]);
+
+                    JPanel panel = new JPanel() {  
+                        @Override
+                        protected void paintComponent(Graphics g) {
+                            super.paintComponent(g); 
+                            g.drawImage(image, 0, 0, (int)Math.round(WIDTH / 9), (int)Math.round(((double)WIDTH) / 9), null);
+                        }
+                    };
+                    panel.setPreferredSize(new Dimension((int)Math.round(WIDTH / 9), (int)Math.round(WIDTH / 9)));
+                    _pnlMiddle.add(panel, constraints);
+                }
+                if((i < 1 || i > 7) || (j < 1 || j > 7)) {
+                    if(i%2==0 && j%2==0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
+                        String buttonText = "";
+                        if(j == 0) {
+                            buttonText = ">";
+                        } else if(j == 8) {
+                            buttonText = "<";
+                        }
+
+                        if(i == 0) {
+                            buttonText = "v";
+                        } else if(i == 8) {
+                            buttonText = "^";
+                        }
+                        constraints.gridx = j;
+                        constraints.gridy = i;
+                        JPanel panel = new JPanel();
+                        JButton btn = new JButton(buttonText);
+                        btn.setBackground(Color.WHITE);
+                        btn.setBorder(null);
+                        btn.setForeground(Color.ORANGE);
+                        btn.setFont(btn.getFont().deriveFont(Font.BOLD, (float) btn.getFont().getSize() + 10));
+                        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        panel.add(btn);
+                        _pnlMiddle.add(panel, constraints);
+                    }
+                }
+            }
+        }
+        _pnlMiddle.revalidate();
+        _pnlMiddle.repaint();
     }
 
     @Override
