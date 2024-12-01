@@ -154,12 +154,26 @@ package app {
         {
             - {final} WIDTH: Integer
             - {final} HEIGHT: Integer
+            - _pnlContentPane: JPanel
+            - _pnlTop: JPanel
+            - _pnlMiddle: JPanel
+            - _pnlBottom: JPanel
+            - _pnlPlayerInfo: JPanel
+            - _currentTilePanel: JPanel
+            - _currentTile: Tile
+            - _controller: GameController
+            - _playerLabels: JLabel[]
+
             + <<create>> LabyrinthDisplay(controller: GameController)
-            + display(str: String)
-            + getTileImage(tile: Tile): Image
-            + updateBoard(tiles Tile[*]): void
-            + updatePlayer(<Player, Vector2D> player): void
-            + updateTile(tile: Tile)
+            - initializeTopPanel()
+            - initializeMiddlePanel()
+            - initializeBottomPanel()
+            - layoutMainPanel()
+            + display(message: String)
+            + getTileImage(tile: Tile): BufferedImage
+            + updateBoard(tiles: Tile[][]): void
+            + updatePlayer(player: <Player, Vector2D>): void
+            + updateTile(tile: Tile): void
         }
     }
 
