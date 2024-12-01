@@ -1,8 +1,11 @@
 package app.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+<<<<<<< HEAD
+=======
+import java.util.List;
+>>>>>>> dda7a8c822233f7f65e08ad15445c1903945acda
 
 public class Board {
 
@@ -113,6 +116,7 @@ public class Board {
     public void setAloneTile(Tile tile)
     {
         aloneTile = tile;
+        notifyObserversTile();
     }
 
     public void notifyObserversBoard() {
