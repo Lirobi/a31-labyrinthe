@@ -7,8 +7,9 @@ Arno s'occupe du modèle et du controller.
 
 ### Lilian
 
+J'ai d'abord établi le début de la vue, les boutons et le layout qui contient le plateau de jeu, j'ai choisi d'utiliser un GridBagLayout pour pouvoir placer les élements a des endroits précis plutot qu'à la suite les uns des autres.
 L'étape suivante à été de coder un algorithme permettant de déterminer la rotation à effectuer sur une image à partir de l'attribut ArrayList<Direction> d'un objet Tile donné en paramètre. L'algorithme se trouve dans la fonction getTileImage qui retourne l'image correspondant à la tile.
-J'ai aussi rajouté une fonction toBufferedImage dans la classe ImageHelper de sorte à pouvoir passer le bon type aux fonctions permettant d'effectuer la rotation des images.
+J'ai ensuite effectué plusieurs optimisations qui m'ont permis de réduire le temps de chargement de ce tableau d'environ 3 secondes à environ 0,5 secondes.
 
 ### Arno
 
@@ -26,6 +27,8 @@ Nous avons commencé par concevoir le modèle puis nous avons conçu tout autour
 - La dernière tuile, celle que l'on peut insérer dans le plateau, appartient à la classe Board et non au controller car seule la vue observe le modèle.
 - La classe Board génère une erreur si on essaye d'insérer une tuile dans une ligne ou une colonne fixe, le controller doit s'assurer de ne pas lever cette erreur (ce mécanisme pourra évoluer avec la modification de la vue)
 - La classe Board possède un dictionnaire de clé Player et de valeur Vector2D, pour l'uml nous avons fait comme il nous semblait pertinent.
+- Les images ne s'affichaient plus.
+- Le plateau ne s'affiche pas correctement sur Linux, cela peut être lié au redimensionnement forcé de la fenêtre.
 
 ### Conceptions manquantes
 
