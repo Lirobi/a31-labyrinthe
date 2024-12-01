@@ -24,6 +24,9 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final int WIDTH = 800;
     private final int HEIGHT = 1000;
 
+    private JPanel _currentTilePanel;
+    private Tile _currentTile;
+
     public LabyrinthDisplay(GameController controller) {
         super("Labyrinthe");
         setSize(WIDTH, HEIGHT);
@@ -35,13 +38,33 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
         _pnlTop.setLayout(new GridBagLayout());
 
+        // Create empty panel for current tile
+        _currentTilePanel = new JPanel();
+        _currentTilePanel.setPreferredSize(new Dimension(80, 80));
+
         JButton btnRotateTileLeft = new JButton("Rotate tile left");
         JButton btnRotateTileRight = new JButton("Rotate tile right");
 
+        btnRotateTileLeft.addActionListener(e -> {
+            controller.rotateLeft();
+        });
+
+        btnRotateTileRight.addActionListener(e -> {
+            controller.rotateRight();
+        });
+
+        // Layout components with GridBagConstraints
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.insets = new Insets(5, 5, 5, 5);
+
         constraints.gridx = 0;
         constraints.gridy = 0;
+        constraints.gridheight = 2;
+        _pnlTop.add(_currentTilePanel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridheight = 1;
         _pnlTop.add(btnRotateTileLeft, constraints);
         constraints.gridy = 1;
         _pnlTop.add(btnRotateTileRight, constraints);
@@ -187,8 +210,34 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     }
 
     @Override
-    public void updateTile(Tile tile)
-    {
-        // quand la tuile seule fait une rotation
+    public void updateTile(Tile tile) {
+        _currentTile = tile;
+        
+        // Remove any existing components
+        _currentTilePanel.removeAll();
+        
+        // Create new panel with painting capability
+        JPanel tileDisplay = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (_currentTile != null) {
+                    BufferedImage image = getTileImage(_currentTile);
+                    if (image != null) {
+                        g.drawImage(image, 0, 0, 80, 80, this);
+                    }
+                }
+            }
+        };
+        tileDisplay.setPreferredSize(new Dimension(80, 80));
+        
+        // Add the tile display to the panel
+        _currentTilePanel.add(tileDisplay);
+        
+        // Refresh the display
+        _currentTilePanel.revalidate();
+        _currentTilePanel.repaint();
+        
+        display("Tile rotated");
     }
 }

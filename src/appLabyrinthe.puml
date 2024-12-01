@@ -31,7 +31,7 @@ package app {
             + notifyObserversPlayer()
             + notifyObserversTile()
 
-            + rotate()
+            + rotateAloneTile()
             + movePlayer(player: Player, direction: Direction):
             + addObserver(observer: Observer)
             + removeObserver(observer: Observer)

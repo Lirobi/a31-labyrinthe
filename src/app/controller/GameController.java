@@ -124,13 +124,13 @@ public class GameController {
 
     public void rotateLeft()
     {
-        _board.getAloneTile().rotate();
+        _board.rotateAloneTile();
     }
     public void rotateRight()
     {
-        _board.getAloneTile().rotate();
-        _board.getAloneTile().rotate();
-        _board.getAloneTile().rotate();
+        _board.rotateAloneTile();
+        _board.rotateAloneTile();
+        _board.rotateAloneTile();
     }
     public void pushCardsOnBoard(Direction dir, int numRowCol)
     {
