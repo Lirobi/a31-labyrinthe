@@ -204,23 +204,35 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 constraints.gridy = i;
                 
                 if((i < 1 || i > 7) || (j < 1 || j > 7)) {
-                    if(i % 2 == 0 && j % 2 == 0 && !(i == 0 && j == 0) && !(i == 0 && j == 8) && 
+                    if(_controller.isMovable(i+1) && _controller.isMovable(j+1) && !(i == 0 && j == 0) && !(i == 0 && j == 8) &&
                        !(i == 8 && j == 0) && !(i == 8 && j == 8)) {
-                        String buttonText = "";
+                        String buttonText;
+                        Direction dir;
+                        int numRowCol;
                         if(j == 0) {
-                            buttonText = ">";
-                        } else if(j == 8) {
-                            buttonText = "<";
+                            buttonText = "→";
+                            dir = Direction.NORTH;
+                            numRowCol = i-1;
                         }
-    
-                        if(i == 0) {
-                            buttonText = "v";
-                        } else if(i == 8) {
-                            buttonText = "^";
+                        else if(j == 8) {
+                            buttonText = "←";
+                            dir = Direction.SOUTH;
+                            numRowCol = i-1;
+                        }
+                        else if(i == 0) {
+                            buttonText = "↓";
+                            dir = Direction.WEST;
+                            numRowCol = j-1;
+                        }
+                        else {
+                            buttonText = "↑";
+                            dir = Direction.EAST;
+                            numRowCol = j-1;
                         }
     
                         JButton button = new JButton(buttonText);
                         button.setPreferredSize(new Dimension(tileSize, tileSize));
+                        button.addActionListener(e -> _controller.pushCardsOnBoard(dir, numRowCol));
                         _pnlMiddle.add(button, constraints);
                     }
                 } else {
@@ -302,5 +314,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _currentTilePanel.repaint();
         
         display("Tile rotated");
+    }
+    public void  updateCurrentPlayer(Player player){
+
     }
 }

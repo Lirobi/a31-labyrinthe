@@ -5,8 +5,7 @@ import java.util.*;
 
 public class GameController {
     private final Board _board;
-    private final Player[] _players = new Player[4];
-    private Integer _currentPlayer;
+
 
     public GameController(Board bd)
     {
@@ -16,6 +15,7 @@ public class GameController {
     {
         _board.initBoard(generateBoard());
         generatePlayers();
+        _board.nextPlayer();
     }
 
     private void generatePlayers() 
@@ -41,7 +41,6 @@ public class GameController {
             }
 
             Player player = new Player(_goals);
-            _players[i] = player;
             _board.addPlayer(player, position);
         }
     }
@@ -138,18 +137,18 @@ public class GameController {
     }
     public void movePlayer(Direction direction)
     {
-        _board.movePlayer(_players[_currentPlayer], direction);
+        _board.movePlayer(_board.getCurrentPlayer(), direction);
     }
     public void endTurn() {
-        if (!_players[_currentPlayer].isRestGoal())
+        if (!_board.getCurrentPlayer().isRestGoal())
             System.exit(0);
         else {
-            _currentPlayer++;
-            if (_currentPlayer == 4)
-                _currentPlayer = 0;
+            _board.nextPlayer();
         }
     }
 
-
-
+    public boolean isMovable(int index)
+    {
+        return _board.isMovable(index);
+    }
 }

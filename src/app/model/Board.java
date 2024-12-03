@@ -9,6 +9,8 @@ public class Board {
     private final List<BoardObserver> _observers = new ArrayList<>();
 
     private final HashMap<Player, Vector2D> _playersPositions = new HashMap<>();
+    private final Player[] _players = new Player[4];
+    private Integer _currentPlayer = 0;
     private Tile _aloneTile;
     private final int SIZE = 7;
     private final Tile[][] _board = new Tile[SIZE][SIZE];
@@ -37,7 +39,7 @@ public class Board {
 
     public Tile changeByDirection(Direction dir, int numRowCol, Tile newTile)
     {
-        if (numRowCol % 2 == 0)
+        if (!isMovable(numRowCol))
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
         Tile tempRetour = switch (dir){
@@ -77,7 +79,7 @@ public class Board {
         Tile tempRetour = _board[0][numRow];
         for (int i = 0; i < SIZE -1; i++)
         {
-            _board[i][numRow] = _board[i][numRow+1];
+            _board[i][numRow] = _board[i+1][numRow];
         }
         _board[SIZE -1][numRow] = newTile;
         return tempRetour;
@@ -86,17 +88,44 @@ public class Board {
     private Tile changeByWest(int numRow, Tile newTile)
     {
         Tile tempRetour = _board[SIZE -1][numRow];
-        for (int i = SIZE; i > 0; i--)
+        for (int i = SIZE -1; i > 0; i--)
         {
-            _board[i][numRow] = _board[i][numRow-1];
+            _board[i][numRow] = _board[i-1][numRow];
         }
         _board[0][numRow] = newTile;
         return tempRetour;
     }
     public void addPlayer(Player player, Vector2D position) {
+        if (_currentPlayer == 4)
+            throw new IllegalArgumentException("Il y a trop de joueurs");
         _playersPositions.put(player, position);
+        _players[_currentPlayer] = player;
+        _currentPlayer++;
         notifyObserversPlayer();
     }
+
+    // NOUVEAU POUR UML
+    public Player getCurrentPlayer()
+    {
+        return _players[_currentPlayer];
+    }
+    public void nextPlayer()
+    {
+        _currentPlayer++;
+        if (_currentPlayer >= 4)
+            _currentPlayer = 0;
+        notifyObserversCurrentPlayer();
+    }
+    public boolean isMovable(int numRowCol)
+    {
+        return numRowCol % 2 == 1;
+    }
+    public void notifyObserversCurrentPlayer() {
+        for (BoardObserver obs : _observers) {
+            obs.updateCurrentPlayer(_players[_currentPlayer]);
+        }
+    }
+    // FIN NOUVEAU UML
 
     public Tile getTileAtPosition(int x, int y)
     {
@@ -139,8 +168,6 @@ public class Board {
         }
     }
 
-
-
     public void rotateAloneTile()
     {
         _aloneTile.rotate();
@@ -179,6 +206,8 @@ public class Board {
         }
         notifyObserversPlayer();
     }
+    // Notifier les flèches directionnelles des possibilités de déplacement pour éviter cette pile de condition et de
+    // générer des erreurs => désactivé les flèches impossibles
 
     public void addObserver(BoardObserver observer) {
         _observers.add(observer);
