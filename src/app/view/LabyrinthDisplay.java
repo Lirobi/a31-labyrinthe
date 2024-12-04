@@ -20,20 +20,23 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final JPanel _pnlMiddle = new JPanel();
     private final JPanel _pnlBottom = new JPanel();
     private final JPanel _pnlPlayerInfo = new JPanel();
-
+    private final JPanel _pnlRotateTile = new JPanel();
     private final int WIDTH = 800;
-    private final int HEIGHT = 1000;
+    private final int HEIGHT = 900;
 
     private JPanel _currentTilePanel;
     private Tile _currentTile;
     private final GameController _controller;
     private final JLabel[] _playerLabels = new JLabel[4];
+    private final JLabel _lblCurrentPlayer = new JLabel("Current player: ");
+    private final JLabel _lblCururentGoal = new JLabel("Current goal:");
 
     public LabyrinthDisplay(GameController controller) {
         super("Labyrinthe");
         _controller = controller;
         setSize(WIDTH, HEIGHT);
-        setResizable(false);
+        setMinimumSize(new Dimension((int)(WIDTH * 0.7), (int)(WIDTH * 1)));
+        //setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initializeTopPanel();
@@ -46,15 +49,15 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     }
 
     private void initializeTopPanel() {
-        _pnlTop.setLayout(new GridBagLayout());
+        _pnlTop.setLayout(new BorderLayout());
         
         // Current tile display
         _currentTilePanel = new JPanel();
         _currentTilePanel.setPreferredSize(new Dimension(80, 80));
 
         // Rotation buttons
-        JButton btnRotateTileLeft = new JButton("Rotate Left");
-        JButton btnRotateTileRight = new JButton("Rotate Right");
+        JButton btnRotateTileLeft = new JButton("⤾");
+        JButton btnRotateTileRight = new JButton("⤿");
 
         btnRotateTileLeft.addActionListener(e -> _controller.rotateLeft());
         btnRotateTileRight.addActionListener(e -> _controller.rotateRight());
@@ -63,23 +66,32 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(5, 5, 5, 5);
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridheight = 2;
-        _pnlTop.add(_currentTilePanel, constraints);
+
+        _pnlTop.setMinimumSize(new Dimension(70,70));
+        _pnlRotateTile.setMinimumSize(new Dimension(70,70));
+        _pnlRotateTile.setLayout(new GridBagLayout());
+        constraints.gridx = 2;
+        _pnlRotateTile.add(_currentTilePanel, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridheight = 1;
-        _pnlTop.add(btnRotateTileLeft, constraints);
+        _pnlRotateTile.add(btnRotateTileLeft, constraints);
         
-        constraints.gridy = 1;
-        _pnlTop.add(btnRotateTileRight, constraints);
+        constraints.gridx = 3;
+        _pnlRotateTile.add(btnRotateTileRight, constraints);
+        
+        _pnlTop.add(_pnlPlayerInfo, BorderLayout.WEST);
+        _pnlTop.add(_pnlRotateTile, BorderLayout.CENTER);
+        JPanel _pnlCurrentPlayer = new JPanel();
+        _pnlCurrentPlayer.setLayout(new GridLayout(2, 1));
+        _pnlCurrentPlayer.add(_lblCurrentPlayer);
+        _pnlCurrentPlayer.add(_lblCururentGoal);
+        _pnlTop.add(_pnlCurrentPlayer, BorderLayout.EAST);
     }
 
     private void initializeMiddlePanel() {
         _pnlMiddle.setLayout(new GridBagLayout());
         _pnlMiddle.setPreferredSize(new Dimension(700, 700));
+        _pnlMiddle.setMinimumSize(new Dimension((int)(WIDTH * 0.7), (int)(WIDTH * 0.7)));
     }
 
     private void initializeBottomPanel() {
@@ -102,7 +114,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         }
 
         // Player information panel
-        _pnlPlayerInfo.setLayout(new GridLayout(2, 2));
+        _pnlPlayerInfo.setLayout(new GridLayout(4, 1));
         for (int i = 0; i < 4; i++) {
             _playerLabels[i] = new JLabel("Player " + (i + 1));
             _pnlPlayerInfo.add(_playerLabels[i]);
@@ -111,7 +123,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         JButton endTurnButton = new JButton("End Turn");
         endTurnButton.addActionListener(e -> _controller.endTurn());
 
-        _pnlBottom.add(_pnlPlayerInfo, BorderLayout.NORTH);
         _pnlBottom.add(movementPanel, BorderLayout.CENTER);
         _pnlBottom.add(endTurnButton, BorderLayout.SOUTH);
     }
@@ -196,7 +207,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlMiddle.removeAll(); // Clear the panel before adding new components
         
         // Calculate tile size - slightly smaller than 1/9th of panel size to allow for gaps
-        int tileSize = 70; // Fixed size for tiles
+        int tileSize = (int)(_pnlMiddle.getWidth() / 9); // Fixed size for tiles
         
         for(int i = 0; i < 9; i++) {
             for(int j = 0; j < 9; j++) {
@@ -270,8 +281,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
             Player player = entry.getKey();
             Vector2D pos = entry.getValue();
-            _playerLabels[i].setText(String.format("Player %d - Position: (%d,%d) - Goals: %d/%d", 
-                i + 1, pos.getX(), pos.getY(), 
+            _playerLabels[i].setText(String.format("Player %d - Goals: %d/%d", 
+                i + 1,
                 player.getGoalSuccessful(), 
                 player.getGoalSuccessful() + player.getGoalNotSuccessful()));
             i++;
@@ -284,6 +295,10 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         
         // Remove any existing components
         _currentTilePanel.removeAll();
+
+        _currentTilePanel.setMinimumSize(new Dimension(_pnlRotateTile.getHeight(), _pnlRotateTile.getHeight()));
+
+        int tileSize = (int)(_currentTilePanel.getWidth());
         
         // Create new panel with painting capability
         JPanel tileDisplay = new JPanel() {
@@ -303,7 +318,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 }
             }
         };
-        tileDisplay.setPreferredSize(new Dimension(70, 70)); // Match the game board tile size
+        tileDisplay.setPreferredSize(new Dimension(70,70)); // Match the game board tile size
         tileDisplay.setBackground(Color.WHITE);
         
         // Add the tile display to the panel
@@ -315,7 +330,9 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         
         display("Tile rotated");
     }
-    public void  updateCurrentPlayer(Player player){
-
+    public void updateCurrentPlayer(Player player){
+        //setTitle("Labyrinthe - Player " + player.getName());
+        //_lblCurrentPlayer.setText("Current player: " + player.getName());
+        _lblCururentGoal.setText("Current goal: " + player.getCurrentGoal().toString());
     }
 }
