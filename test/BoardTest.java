@@ -13,8 +13,8 @@ public class BoardTest {
     void test()
     {
         Board bd = new Board();
+        bd.initGame();
         GameController game = new GameController(bd);
-        game.initGame();
         game.movePlayer(Direction.EAST);
     }
 }
