@@ -2,9 +2,7 @@ package app.helpers;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  * Set of static functions allowing to manipulate images
@@ -19,16 +17,26 @@ public class ImageHelper {
 	 * @param foregroundPaths is the list of path of the other images
 	 * @return an image combining the foreground image over the background image
 	 */
-	public static BufferedImage merge(String backgroundPath, String... foregroundPaths ) throws IOException {
-		BufferedImage image1 = ImageIO.read(new File(backgroundPath));
-		BufferedImage mergedImage = new BufferedImage( image1.getWidth(), image1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = mergedImage.createGraphics();
-		g2d.drawImage(image1, 0, 0, null);
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-		for ( String path : foregroundPaths ) {
-			BufferedImage image2 = ImageIO.read(new File(path));
-			g2d.drawImage(image2, 0, 0, null);
+	public static BufferedImage merge(BufferedImage bg, BufferedImage fg ) throws IOException {
+		// Check for null images
+		if (bg == null || fg == null) {
+			throw new IllegalArgumentException("Background or foreground image cannot be null");
 		}
+
+		// Create new image with background dimensions
+		BufferedImage mergedImage = new BufferedImage(bg.getWidth(), bg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = mergedImage.createGraphics();
+
+		// Enable anti-aliasing for better quality
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Draw background
+		g2d.drawImage(bg, 0, 0, null);
+
+		// Scale foreground to match background size
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+		g2d.drawImage(fg, 0, 0, bg.getWidth(), bg.getHeight(), null);
+
 		g2d.dispose();
 		return mergedImage;
 	}
