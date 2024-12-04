@@ -286,6 +286,12 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 player.getGoalSuccessful(), 
                 player.getGoalSuccessful() + player.getGoalNotSuccessful()));
             i++;
+
+            JLabel lblPlayer = new JLabel("♟" + i);
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = entry.getValue().getX() + 1;
+            constraints.gridy = entry.getValue().getY() + 1;
+            _pnlMiddle.add(lblPlayer, constraints);
         }
     }
 

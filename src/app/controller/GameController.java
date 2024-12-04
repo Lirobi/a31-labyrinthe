@@ -16,6 +16,7 @@ public class GameController {
         _board.initBoard(generateBoard());
         generatePlayers();
         _board.nextPlayer();
+        System.out.println(_board.getCurrentPlayer());
     }
 
     private void generatePlayers() 
