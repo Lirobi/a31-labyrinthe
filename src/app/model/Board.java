@@ -188,21 +188,27 @@ public class Board {
         if(vector2.getY() == SIZE && direction == Direction.EAST)
             throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
 
-        if (!_board[vector2.getX()-1][vector2.getY()].isDirectionPossible(direction))
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2.getX()+1][vector2.getY()].isDirectionPossible(direction))
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2.getX()-1][vector2.getY()+1].isDirectionPossible(direction))
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if (!_board[vector2.getX()-1][vector2.getY()-1].isDirectionPossible(direction))
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-
         switch (direction)
         {
-            case EAST ->_playersPositions.get(player).moveRight();
-            case WEST ->_playersPositions.get(player).moveLeft();
-            case NORTH ->_playersPositions.get(player).moveTop();
-            case SOUTH -> _playersPositions.get(player).moveBottom();
+            case EAST ->{
+                if (!_board[vector2.getX()+1][vector2.getY()].isDirectionPossible(direction))
+                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+                _playersPositions.get(player).moveRight();
+            }
+            case WEST ->{
+                if (!_board[vector2.getX()-1][vector2.getY()].isDirectionPossible(direction))
+                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+                _playersPositions.get(player).moveLeft();
+            }
+            case NORTH ->{
+                if (!_board[vector2.getX()-1][vector2.getY()-1].isDirectionPossible(direction))
+                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+                _playersPositions.get(player).moveTop();
+            }
+            case SOUTH ->{
+                if (!_board[vector2.getX()-1][vector2.getY()+1].isDirectionPossible(direction))
+                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
+                _playersPositions.get(player).moveBottom();}
         }
         notifyObserversPlayer();
     }
