@@ -30,6 +30,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final JLabel[] _playerLabels = new JLabel[4];
     private final JLabel _lblCurrentPlayer = new JLabel("Current player: ");
     private final JLabel _lblCururentGoal = new JLabel("Current goal:");
+    private final JLabel[] _lblPlayer = new JLabel[4];
 
     public LabyrinthDisplay(GameController controller) {
         super("Labyrinthe");
@@ -265,6 +266,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                             }
                         }
                     };
+                    panel.setName("tilePanel");
                     panel.setPreferredSize(new Dimension(tileSize, tileSize));
                     panel.setBackground(Color.WHITE); // Add background color
                     _pnlMiddle.add(panel, constraints);
@@ -286,12 +288,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 player.getGoalSuccessful(), 
                 player.getGoalSuccessful() + player.getGoalMaxNumber()));
             i++;
-
-            JLabel lblPlayer = new JLabel("♟" + i);
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.gridx = entry.getValue().getX() + 1;
-            constraints.gridy = entry.getValue().getY() + 1;
-            _pnlMiddle.add(lblPlayer, constraints);
         }
     }
 
