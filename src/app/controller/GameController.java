@@ -16,12 +16,15 @@ public class GameController {
         _board.initBoard(generateBoard());
         generatePlayers();
         _board.nextPlayer();
+        System.out.println(_board.getCurrentPlayer());
     }
 
     private void generatePlayers() 
     {
         ArrayList<Goal> goals = new ArrayList<>(Arrays.asList(Goal.values()));
         Collections.shuffle(goals);
+
+        String[] tabName = {"jaune", "bleu", "vert", "rouge"};
 
         for(int i = 0; i < 4; i++) {
             Stack<Goal> _goals = new Stack<>();
@@ -40,7 +43,7 @@ public class GameController {
                 goals.removeFirst();
             }
 
-            Player player = new Player(_goals);
+            Player player = new Player(_goals, tabName[i]);
             _board.addPlayer(player, position);
         }
     }

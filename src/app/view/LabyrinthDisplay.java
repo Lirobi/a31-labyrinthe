@@ -281,10 +281,10 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
             Player player = entry.getKey();
             Vector2D pos = entry.getValue();
-            _playerLabels[i].setText(String.format("Player %d - Goals: %d/%d", 
-                i + 1,
+            _playerLabels[i].setText(String.format("Player %s - Goals: %d/%d",
+                player.getName(),
                 player.getGoalSuccessful(), 
-                player.getGoalSuccessful() + player.getGoalNotSuccessful()));
+                player.getGoalSuccessful() + player.getGoalMaxNumber()));
             i++;
         }
     }
@@ -331,8 +331,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         display("Tile rotated");
     }
     public void updateCurrentPlayer(Player player){
-        //setTitle("Labyrinthe - Player " + player.getName());
-        //_lblCurrentPlayer.setText("Current player: " + player.getName());
+        setTitle("Labyrinthe - Player " + player.getName());
+        _lblCurrentPlayer.setText("Current player: " + player.getName());
         _lblCururentGoal.setText("Current goal: " + player.getCurrentGoal().toString());
     }
 }

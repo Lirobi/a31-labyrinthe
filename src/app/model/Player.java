@@ -6,21 +6,24 @@ public class Player {
 
     private final Stack<Goal> _goalsStack;
     private int _goalSuccessful = 0;
-    private int _goalNotSuccessful;
+    private int _goalMax;
 
-    public Player(Stack<Goal> goals)
+    private final String _name;
+
+    public Player(Stack<Goal> goals, String name)
     {
-        _goalNotSuccessful = goals.size();
+        _goalMax = goals.size();
         _goalsStack = goals;
+        _name = name;
 
     }
     public int getGoalSuccessful()
     {
         return _goalSuccessful;
     }
-    public int getGoalNotSuccessful()
+    public int getGoalMaxNumber()
     {
-        return _goalNotSuccessful;
+        return _goalMax;
     }
     public boolean isRestGoal()
     {
@@ -34,7 +37,7 @@ public class Player {
     {
         _goalsStack.pop();
         _goalSuccessful++;
-        _goalNotSuccessful--;
+        _goalMax--;
     }
 
     public Goal getCurrentGoal()
@@ -42,9 +45,13 @@ public class Player {
         return _goalsStack.peek();
     }
 
+    public String getName()
+    {
+        return _name;
+    }
     @Override
     public String toString()
     {
-        return "Le joueur a "+_goalSuccessful+" succès réussi(s) et a "+_goalNotSuccessful+" succès a encore valider";
+        return "Le joueur "+_name+" a "+_goalSuccessful+" succès réussi(s) sur "+ _goalMax +" succès";
     }
 }
