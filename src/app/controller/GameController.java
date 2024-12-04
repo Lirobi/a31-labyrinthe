@@ -16,7 +16,6 @@ public class GameController {
         _board.initBoard(generateBoard());
         generatePlayers();
         _board.nextPlayer();
-        System.out.println(_board.getCurrentPlayer());
     }
 
     private void generatePlayers() 
@@ -75,6 +74,10 @@ public class GameController {
         randomTiles.addAll(tiles);
     
         set[0] = ft.createL();
+        // To test
+        set[1] = ft.createI();
+        set[1].rotate();
+
         set[2] = ft.createT();
         set[4] = ft.createT();
         set[6] = ft.createL();
