@@ -149,7 +149,22 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     public void display(String message) {
         System.out.println(message);
     }
-    
+
+    public BufferedImage drawPlayerOnImage(BufferedImage image, Player... player) {
+        BufferedImage playerImage = null;
+        try {
+            playerImage = ImageIO.read(new File("./assets/images/pion.png"));
+        } catch (IOException e) {
+            System.err.println("Error: Unable to load player image from resource.");
+            e.printStackTrace();
+        }
+        try {
+            image = ImageHelper.merge(image, playerImage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return image;
+    }
     public BufferedImage getTileImage(Tile tile) {
         String path = tile.getPathImg();
         BufferedImage image = null;
@@ -248,8 +263,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                         _pnlMiddle.add(button, constraints);
                     }
                 } else {
-                    BufferedImage image = getTileImage(tiles[i - 1][j - 1]);
-    
+                    BufferedImage image = drawPlayerOnImage(getTileImage(tiles[i - 1][j - 1]));
+
                     JPanel panel = new JPanel() {  
                         @Override
                         protected void paintComponent(Graphics g) {
@@ -309,6 +324,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 super.paintComponent(g);
                 if (_currentTile != null) {
                     BufferedImage image = getTileImage(_currentTile);
+                    image = drawPlayerOnImage(image);
                     if (image != null) {
                         Graphics2D g2d = (Graphics2D) g;
                         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
