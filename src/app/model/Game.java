@@ -59,6 +59,17 @@ public class Game {
         notifyObserversTile();
     }
 
+    public void addObserver(BoardObserver observer) {
+        _observers.add(observer);
+    }
+
+    public void removeObserver(BoardObserver observer) {
+        _observers.remove(observer);
+    }
+    public void removeObserver(int index) {
+        _observers.remove(index);
+    }
+
     public void notifyObserversCurrentPlayer() {
         for (BoardObserver obs : _observers) {
             obs.updateCurrentPlayer(_players.getCurrentPlayer());
@@ -140,16 +151,7 @@ public class Game {
         return _board.getTileAtPosition(position.getX(), position.getY());
     }
 
-    public void addObserver(BoardObserver observer) {
-        _observers.add(observer);
-    }
 
-    public void removeObserver(BoardObserver observer) {
-        _observers.remove(observer);
-    }
-    public void removeObserver(int index) {
-        _observers.remove(index);
-    }
 
     public boolean isMovable(int numRowCol) {
         return _board.isMovable(numRowCol);
@@ -169,4 +171,6 @@ public class Game {
         System.out.println("Fin du jeu");
         System.exit(0);
     }
+
+
 }

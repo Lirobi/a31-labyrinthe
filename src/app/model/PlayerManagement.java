@@ -8,7 +8,7 @@ public class PlayerManagement {
     private final HashMap<Player, Vector2D> _playersPositions = new HashMap<>();
     private final Player[] _players = new Player[PLAYER_NUMBER];
     private Integer _currentPlayer = 0;
-    private final String[] _name = {"jaune", "bleu", "vert", "rouge"};
+    private final String[] NAME = {"jaune", "bleu", "vert", "rouge"};
 
     public PlayerManagement()
     {
@@ -37,12 +37,12 @@ public class PlayerManagement {
                 goals.removeFirst();
             }
 
-            Player player = new Player(_goals, _name[i]);
+            Player player = new Player(_goals, NAME[i]);
             addPlayer(player, position);
         }
         nextPlayer(); // pour retourner sur le premier joueur sinon c'est le joueur 4 qui joue, mais il existe pas
     }
-    public void addPlayer(Player player, Vector2D position) {
+    private void addPlayer(Player player, Vector2D position) {
         if (_currentPlayer == PLAYER_NUMBER)
             throw new IllegalArgumentException("Il y a trop de joueurs");
         _playersPositions.put(player, position);
