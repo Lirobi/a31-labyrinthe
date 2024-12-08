@@ -3,7 +3,7 @@
 import java.util.Stack;
 
 public class TileFactory {
-    private String path = "./assets/images/";
+    private final String path = "./assets/images/";
     public TileFactory()
     {
 

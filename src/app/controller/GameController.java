@@ -1,57 +1,51 @@
 package app.controller;
 
 import app.model.*;
-import java.util.*;
 
 public class GameController {
-    private final Board _board;
+    private final Game _game;
 
 
-    public GameController(Board bd)
+    public GameController(Game bd)
     {
-        _board = bd;
+        _game = bd;
     }
 
     public void initGame()
     {
-        _board.initGame();
+        _game.initGame();
     }
 
     public void rotateLeft()
     {
-        _board.rotateAloneTile();
+        _game.rotateAloneTile();
     }
     public void rotateRight()
     {
-        _board.rotateAloneTile();
-        _board.rotateAloneTile();
-        _board.rotateAloneTile();
+        _game.rotateAloneTile();
+        _game.rotateAloneTile();
+        _game.rotateAloneTile();
     }
     public void pushCardsOnBoard(Direction dir, int numRowCol)
     {
-        _board.setAloneTile(_board.changeByDirection(dir, numRowCol, _board.getAloneTile()));
+        _game.setAloneTile(_game.changeByDirection(dir, numRowCol, _game.getAloneTile()));
     }
     public void movePlayer(Direction direction)
     {
-        _board.movePlayer(_board.getCurrentPlayer(), direction);
+        _game.movePlayer(direction);
     }
     public void endTurn() {
-        Tile tile = _board.getTileAtPosition(_board.getPlayer().get(_board.getCurrentPlayer()).getX(), _board.getPlayer().get(_board.getCurrentPlayer()).getY());
-        if (tile.existGoal())
-        {
-            if (tile.getGoal() == _board.getCurrentPlayer().getCurrentGoal())
-                _board.getCurrentPlayer().nextGoal();
-        }
+        _game.nextGoalCurrentPlayer();
 
-        if (!_board.getCurrentPlayer().isRestGoal())
+        if (_game.ifCurrentPlayerWin())
             System.exit(0);
         else {
-            _board.nextPlayer();
+            _game.nextPlayer();
         }
     }
 
     public boolean isMovable(int index)
     {
-        return _board.isMovable(index);
+        return _game.isMovable(index);
     }
 }

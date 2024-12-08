@@ -218,7 +218,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
      * @param tiles is a tab
      */
     @Override
-    public void updateBoard(Tile[][] tiles) {
+    public void updateBoard(Tile[][] tiles, HashMap<Player, Vector2D> players) {
         GridBagConstraints constraints = new GridBagConstraints();
         _pnlMiddle.removeAll(); // Clear the panel before adding new components
         
@@ -290,18 +290,20 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         }
         _pnlMiddle.revalidate();
         _pnlMiddle.repaint();
-    }
 
+
+    }
     @Override
-    public void updatePlayer(HashMap<Player, Vector2D> players) {
+    public void updatePlayer(HashMap<Player, Vector2D> players)
+    {
         int i = 0;
         for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
             Player player = entry.getKey();
             Vector2D pos = entry.getValue();
             _playerLabels[i].setText(String.format("Player %s - Goals: %d/%d",
-                player.getName(),
-                player.getGoalSuccessful(), 
-                player.getGoalSuccessful() + player.getGoalMaxNumber()));
+                    player.getName(),
+                    player.getGoalSuccessful(),
+                    player.getGoalSuccessful() + player.getGoalMaxNumber()));
             i++;
         }
     }
@@ -353,4 +355,12 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _lblCurrentPlayer.setText("Current player: " + player.getName());
         _lblCururentGoal.setText("Current goal: " + player.getCurrentGoal().toString());
     }
+
+    public void updatePossibleDirections(ArrayList<Direction> possibleDirections)
+    {
+
+    }
 }
+
+
+
