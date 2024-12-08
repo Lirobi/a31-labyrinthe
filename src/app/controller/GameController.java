@@ -35,12 +35,12 @@ public class GameController {
         _game.movePlayer(direction);
     }
     public void endTurn() {
-        _game.nextGoalCurrentPlayer();
 
-        if (_game.ifCurrentPlayerWin())
-            System.exit(0);
+        if (_game.ifCurrentPlayerWin()) {
+            _game.endGame();
+        }
         else {
-            _game.nextPlayer();
+            _game.nextTurn();
         }
     }
 
