@@ -79,3 +79,19 @@ Par exemple :
 Problèmes rencontrés : 
 - Les déplacements des joueurs étaient décalés, cliquer sur une fleche faisait bouger le joueur dans une autre direction.
 - Les directions de déplacement autorisées n'étaient pas les bonnes. Je me suis rendu compte que nous avions oublié une vérification dans la fonction changePossibleDirection.
+
+
+# Installation et lancement du jeu
+
+Build:
+
+- Dans un terminal à la racine du projet, taper la commande 'make jar'.
+
+Lancement:
+
+- Dans un terminal à la racine du projet, taper la commande 'java -jar out/Labyrinthe.jar'.
+
+Nettoyage:
+
+- Dans un terminal à la racine du projet, taper la commande 'make clean'.
+
