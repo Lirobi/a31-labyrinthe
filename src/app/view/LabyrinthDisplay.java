@@ -151,10 +151,16 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         System.out.println(message);
     }
 
-    public BufferedImage drawPlayerOnImage(BufferedImage image, Player... player) {
+    public BufferedImage drawPlayerOnImage(BufferedImage image, Player player) {
+
+        String imagePath = "./assets/images/pion-";
+        imagePath += player.getName();
+        imagePath += ".png";
+
         BufferedImage playerImage = null;
+
         try {
-            playerImage = ImageIO.read(new File("./assets/images/pion.png"));
+            playerImage = ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             System.err.println("Error: Unable to load player image from resource.");
             e.printStackTrace();
@@ -267,7 +273,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                     BufferedImage image = getTileImage(tiles[i - 1][j - 1]);
                     for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
                         if(entry.getValue().getX() == i - 1 && entry.getValue().getY() == j - 1) {
-                            image = drawPlayerOnImage(image);
+                            image = drawPlayerOnImage(image, entry.getKey());
                         }
                     }
                     BufferedImage finalImage = image;
@@ -389,7 +395,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 btn.setForeground(Color.BLACK);
             } else {
                 btn.setForeground(Color.RED);
-                btn.setVisible(false);
             }
             _movementPanel.add(btn, gbc);
         }
