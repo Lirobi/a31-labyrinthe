@@ -161,7 +161,8 @@ public class Game {
     {
         _players.nextPlayer();
         nextGoalCurrentPlayer();
-        changePossibleDirection();
+        // changePossibleDirection();
+        _possibleDirectionsOfCurrentPlayer.clear();// pour empêcher le joueur de se déplacer avant d'insérer
         notifyPossibleDirections();
         notifyObserversCurrentPlayer();
         notifyObserversPlayer();
