@@ -33,8 +33,8 @@ public class PlayerManagement {
             }
 
             for(int j = 0; j < Goal.values().length/PLAYER_NUMBER; j++) {
-                _goals.push((goals.getFirst()));
-                goals.removeFirst();
+                _goals.push(goals.get(0));
+                goals.remove(0);
             }
 
             Player player = new Player(_goals, NAME[i]);

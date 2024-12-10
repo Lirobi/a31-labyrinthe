@@ -5,6 +5,7 @@ import app.model.*;
 public class GameController {
     private final Game _game;
 
+    private boolean _testIfTilePushed = false;
 
     public GameController(Game bd)
     {
@@ -28,11 +29,14 @@ public class GameController {
     }
     public void pushCardsOnBoard(Direction dir, int numRowCol)
     {
-        _game.setAloneTile(_game.changeByDirection(dir, numRowCol, _game.getAloneTile()));
+        if (!_testIfTilePushed)
+            _game.setAloneTile(_game.changeByDirection(dir, numRowCol, _game.getAloneTile()));
+        _testIfTilePushed = true;
+
     }
     public void movePlayer(Direction direction)
     {
-        _game.movePlayer(direction);
+            _game.movePlayer(direction);
     }
     public void endTurn() {
 
@@ -42,6 +46,7 @@ public class GameController {
         else {
             _game.nextTurn();
         }
+        _testIfTilePushed = false;
     }
 
     public boolean isMovable(int index)
