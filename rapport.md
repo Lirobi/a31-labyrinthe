@@ -56,3 +56,26 @@ Les images ont été faites via photoshop.
 - Ecrire des tests unitaires qui permettront de s'assurer du bon fonctionneement du modèle indépendemment de la vue.
 - Finir rapidement la vue pour tester le jeu via l'interface graphique et ainsi améliorer le projet.
 - Créer l'écran de fin et donc la gestion de fin de partie (pour l'instant le programme quitte brutalement).
+
+
+
+# Rapport du second rendu (rendu2)
+
+## Lilian
+Pendant la partie 2, j'ai complété la vue, j'ai ajouté les boutons de déplacement, de rotation et de fin de tour.
+J'ai aussi ajouté les labels qui indiquent le joueur actif et les objectifs des joueurs.
+J'ai du a plusieurs reprises régler des problemes d'affichage des tuiles.
+J'ai ensuite implémenté l'afficahge d'un joueur qui se fait via un pion.
+L'étape suivante à été de gérer les déplacements des joueurs, Arno s'est occupé de la partie logique et j'ai géré l'affichage.
+Nous avons du modifier plusieurs fois les fichiers du modèle pour s'adapter à la vue. Je pense que je fait d'avoir fait les modèles avant la vue nous a permis de gagner du temps. Cependant, nous avons surtout du modifier les valeurs passées en paramètre des fonctions de l'observer pour les rendre utilisables par la vue.
+J'ai ensuite ajouté l'affichage des objectifs.
+Pour cela, j'ai du ajouter la génération aléatoire de la position des objectifs sur le plateau.
+Pour cela, j'ai du modifier la façon dont les objectifs sont affectés aux tuiles.
+
+Par exemple :
+    Nous avions d'abord une fonction updatePlayers que nous comptions utiliser pour mettre à jour les positions des joueurs, mais lorsque j'ai du implémenter l'affichage des joueurs, je me suis rendu compte que j'avais besoin d'obtenir les positions des joueurs dans l'actualisation du plateau, ce qui a mené à la modification de la fonction updateBoard pour y ajouter les positions des joueurs.
+    Nous avions aussi une fonction updateCurrentPlayer qui nous permettait de mettre à jour le joueur actif, mais lorsque j'ai du implémenter l'affichage du joueur actif, je me suis rendu compte que j'avais besoin d'obtenir le nom du joueur actif dans l'actualisation du plateau, ce qui a mené à la modification de la fonction updateBoard pour y ajouter le nom du joueur actif.
+
+Problèmes rencontrés : 
+- Les déplacements des joueurs étaient décalés, cliquer sur une fleche faisait bouger le joueur dans une autre direction.
+- Les directions de déplacement autorisées n'étaient pas les bonnes. Je me suis rendu compte que nous avions oublié une vérification dans la fonction changePossibleDirection.
