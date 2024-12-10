@@ -47,6 +47,7 @@ public class Game {
             case SOUTH -> _board.changeBySouth(numRowCol, newTile);
             case WEST -> _board.changeByWest(numRowCol, newTile);
         };
+        changePossibleDirection();
         notifyPossibleDirections();
         notifyObserversBoard();
         return tempRetour;
@@ -116,13 +117,13 @@ public class Game {
         int x = vector2.getX();
         int y = vector2.getY();
 
-        if(x != 0 && _board.getTileAtPosition(x-1, y).getDirection().contains(Direction.SOUTH))
+        if(x != 0 && _board.getTileAtPosition(x-1, y).getDirection().contains(Direction.SOUTH) && _board.getTileAtPosition(x, y).getDirection().contains(Direction.NORTH))
             _possibleDirectionsOfCurrentPlayer.add(Direction.NORTH);
-        if(x != _board.getSize()-1 && _board.getTileAtPosition(x+1, y).getDirection().contains(Direction.NORTH))
+        if(x != _board.getSize()-1 && _board.getTileAtPosition(x+1, y).getDirection().contains(Direction.NORTH) && _board.getTileAtPosition(x, y).getDirection().contains(Direction.SOUTH))
             _possibleDirectionsOfCurrentPlayer.add(Direction.SOUTH);
-        if(y != 0 && _board.getTileAtPosition(x, y-1).getDirection().contains(Direction.EAST))
+        if(y != 0 && _board.getTileAtPosition(x, y-1).getDirection().contains(Direction.EAST) && _board.getTileAtPosition(x, y).getDirection().contains(Direction.WEST))
             _possibleDirectionsOfCurrentPlayer.add(Direction.WEST);
-        if(y != _board.getSize()-1 && _board.getTileAtPosition(x, y+1).getDirection().contains(Direction.WEST))
+        if(y != _board.getSize()-1 && _board.getTileAtPosition(x, y+1).getDirection().contains(Direction.WEST) && _board.getTileAtPosition(x, y).getDirection().contains(Direction.EAST))
             _possibleDirectionsOfCurrentPlayer.add(Direction.EAST);
     }
 

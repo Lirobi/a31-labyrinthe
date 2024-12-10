@@ -337,7 +337,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 super.paintComponent(g);
                 if (_currentTile != null) {
                     BufferedImage image = getTileImage(_currentTile);
-                    image = drawPlayerOnImage(image);
                     if (image != null) {
                         Graphics2D g2d = (Graphics2D) g;
                         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -361,12 +360,15 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         
         display("Tile rotated");
     }
+
+    @Override
     public void updateCurrentPlayer(Player player){
         setTitle("Labyrinthe - Player " + player.getName());
         _lblCurrentPlayer.setText("Current player: " + player.getName());
         _lblCururentGoal.setText("Current goal: " + player.getCurrentGoal().toString());
     }
 
+    @Override
     public void updatePossibleDirections(ArrayList<Direction> possibleDirections)
     {
         System.out.println(possibleDirections);
@@ -384,8 +386,10 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
             gbc.gridy = i == 0 ? 0 : (i == 2 ? 2 : 1);
             if(possibleDirections.contains(dir)) {
                 btn.addActionListener(e -> _controller.movePlayer(dir));
+                btn.setForeground(Color.BLACK);
             } else {
-                btn.setBackground(Color.RED);
+                btn.setForeground(Color.RED);
+                btn.setVisible(false);
             }
             _movementPanel.add(btn, gbc);
         }
