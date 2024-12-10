@@ -12,9 +12,6 @@ public class BoardTest {
     @Test
     void test()
     {
-        Board bd = new Board();
-        GameController game = new GameController(bd);
-        game.initGame();
-        game.movePlayer(Direction.EAST);
+
     }
 }

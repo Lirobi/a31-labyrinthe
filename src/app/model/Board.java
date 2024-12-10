@@ -1,17 +1,9 @@
 package app.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Board {
 
-    private final List<BoardObserver> _observers = new ArrayList<>();
-
-    private final HashMap<Player, Vector2D> _playersPositions = new HashMap<>();
-    private final Player[] _players = new Player[4];
-    private Integer _currentPlayer = 0;
-    private Tile _aloneTile;
     private final int SIZE = 7;
     private final Tile[][] _board = new Tile[SIZE][SIZE];
 
@@ -19,13 +11,86 @@ public class Board {
     {
 
     }
-    public void initBoard(Tile[] setTiles)
+
+    public void initBoard()
     {
-        createBoard(setTiles);
-        notifyObserversBoard();
+        createBoard(generateBoard());
+    }
+
+    private Tile[] generateBoard() {
+        Tile[] set = new Tile[49];
         TileFactory ft = new TileFactory();
-        _aloneTile = ft.createI();
-        notifyObserversTile();
+
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (int i = 0; i < 16; i++) {
+            tiles.add(ft.createL());
+        }
+        for (int i = 0; i < 12; i++) {
+            tiles.add(ft.createI());
+        }
+        for (int i = 0; i < 6; i++) {
+            tiles.add(ft.createT());
+        }
+
+        Collections.shuffle(tiles);
+        for (Tile t : tiles) {
+            int rotations = new Random().nextInt(4);
+            for (int i = 0; i < rotations; i++) {
+                t.rotate();
+            }
+        }
+
+        Stack<Tile> randomTiles = new Stack<>();
+        randomTiles.addAll(tiles);
+
+        set[0] = ft.createL();
+        set[2] = ft.createT();
+        set[4] = ft.createT();
+        set[6] = ft.createL();
+        set[6].rotate();
+        set[14] = ft.createT();
+        set[14].rotate();
+        set[14].rotate();
+        set[14].rotate();
+        set[16] = ft.createT();
+        set[16].rotate();
+        set[16].rotate();
+        set[16].rotate();
+        set[18] = ft.createT();
+        set[20] = ft.createT();
+        set[20].rotate();
+        set[28] = ft.createT();
+        set[28].rotate();
+        set[28].rotate();
+        set[28].rotate();
+        set[30] = ft.createT();
+        set[30].rotate();
+        set[30].rotate();
+        set[32] = ft.createT();
+        set[32].rotate();
+        set[34] = ft.createT();
+        set[34].rotate();
+        set[42] = ft.createL();
+        set[42].rotate();
+        set[42].rotate();
+        set[42].rotate();
+        set[44] = ft.createT();
+        set[44].rotate();
+        set[44].rotate();
+        set[46] = ft.createT();
+        set[46].rotate();
+        set[46].rotate();
+        set[48] = ft.createL();
+        set[48].rotate();
+        set[48].rotate();
+
+        for (int i = 0; i < set.length; i++) {
+            if (set[i] == null) {
+                set[i] = randomTiles.pop();
+            }
+        }
+
+        return set;
     }
 
     private void createBoard(Tile[] setTiles)
@@ -34,25 +99,9 @@ public class Board {
         {
             _board[i/ SIZE][i% SIZE] = setTiles[i];
         }
-        notifyObserversBoard();
     }
 
-    public Tile changeByDirection(Direction dir, int numRowCol, Tile newTile)
-    {
-        if (!isMovable(numRowCol))
-            throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
-
-        Tile tempRetour = switch (dir){
-            case NORTH -> changeByNorth(numRowCol, newTile);
-            case EAST -> changeByEast(numRowCol, newTile);
-            case SOUTH -> changeBySouth(numRowCol, newTile);
-            case WEST -> changeByWest(numRowCol, newTile);
-        };
-        notifyObserversBoard();
-        return tempRetour;
-    }
-
-    private Tile changeByNorth(int numCol, Tile newTile)
+    public Tile changeByNorth(int numCol, Tile newTile)
     {
         Tile tempRetour = _board[numCol][SIZE -1];
         for (int i = SIZE -1; i > 0; i--)
@@ -63,7 +112,7 @@ public class Board {
         return tempRetour;
     }
 
-    private Tile changeBySouth(int numCol, Tile newTile)
+    public Tile changeBySouth(int numCol, Tile newTile)
     {
         Tile tempRetour = _board[numCol][0];
         for (int i = 0; i < SIZE -1; i++)
@@ -74,7 +123,7 @@ public class Board {
         return tempRetour;
     }
 
-    private Tile changeByEast(int numRow, Tile newTile)
+    public Tile changeByEast(int numRow, Tile newTile)
     {
         Tile tempRetour = _board[0][numRow];
         for (int i = 0; i < SIZE -1; i++)
@@ -85,7 +134,7 @@ public class Board {
         return tempRetour;
     }
 
-    private Tile changeByWest(int numRow, Tile newTile)
+    public Tile changeByWest(int numRow, Tile newTile)
     {
         Tile tempRetour = _board[SIZE -1][numRow];
         for (int i = SIZE -1; i > 0; i--)
@@ -95,37 +144,11 @@ public class Board {
         _board[0][numRow] = newTile;
         return tempRetour;
     }
-    public void addPlayer(Player player, Vector2D position) {
-        if (_currentPlayer == 4)
-            throw new IllegalArgumentException("Il y a trop de joueurs");
-        _playersPositions.put(player, position);
-        _players[_currentPlayer] = player;
-        _currentPlayer++;
-        notifyObserversPlayer();
-    }
 
-    // NOUVEAU POUR UML
-    public Player getCurrentPlayer()
-    {
-        return _players[_currentPlayer];
-    }
-    public void nextPlayer()
-    {
-        _currentPlayer++;
-        if (_currentPlayer >= 4)
-            _currentPlayer = 0;
-        notifyObserversCurrentPlayer();
-    }
     public boolean isMovable(int numRowCol)
     {
         return numRowCol % 2 == 1;
     }
-    public void notifyObserversCurrentPlayer() {
-        for (BoardObserver obs : _observers) {
-            obs.updateCurrentPlayer(_players[_currentPlayer]);
-        }
-    }
-    // FIN NOUVEAU UML
 
     public Tile getTileAtPosition(int x, int y)
     {
@@ -134,96 +157,8 @@ public class Board {
     public Tile[][] getBoard(){
         return _board;
     }
-    public HashMap<Player, Vector2D> getPlayer()
-    {
-        return _playersPositions;
-    }
+
     public int getSize() {
         return SIZE;
     }
-    public Tile getAloneTile()
-    {
-        return _aloneTile;
-    }
-    public void setAloneTile(Tile tile)
-    {
-        _aloneTile = tile;
-        notifyObserversTile();
-    }
-
-    public void notifyObserversBoard() {
-        for (BoardObserver obs : _observers) {
-            obs.updateBoard(this.getBoard());
-        }
-    }
-
-    public void notifyObserversPlayer() {
-        for (BoardObserver obs : _observers) {
-            obs.updatePlayer(this.getPlayer());
-        }
-    }
-    public void notifyObserversTile() {
-        for (BoardObserver obs : _observers) {
-            obs.updateTile(this.getAloneTile());
-        }
-    }
-
-    public void rotateAloneTile()
-    {
-        _aloneTile.rotate();
-        notifyObserversTile();
-    }
-
-    public void movePlayer(Player player, Direction direction) {
-        if(!_playersPositions.containsKey(player))
-            throw new IllegalArgumentException("Le joueur n'est pas sur le plateau");
-        Vector2D vector2 = _playersPositions.get(player);
-
-        if(vector2.getX() == 0 && direction == Direction.NORTH)
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2.getX() == SIZE && direction == Direction.SOUTH)
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2.getY() == 0 && direction == Direction.WEST)
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-        if(vector2.getY() == SIZE && direction == Direction.EAST)
-            throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-
-        switch (direction)
-        {
-            case EAST ->{
-                if (!_board[vector2.getX()+1][vector2.getY()].isDirectionPossible(direction))
-                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-                _playersPositions.get(player).moveRight();
-            }
-            case WEST ->{
-                if (!_board[vector2.getX()-1][vector2.getY()].isDirectionPossible(direction))
-                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-                _playersPositions.get(player).moveLeft();
-            }
-            case NORTH ->{
-                if (!_board[vector2.getX()-1][vector2.getY()-1].isDirectionPossible(direction))
-                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-                _playersPositions.get(player).moveTop();
-            }
-            case SOUTH ->{
-                if (!_board[vector2.getX()-1][vector2.getY()+1].isDirectionPossible(direction))
-                    throw new IllegalArgumentException("Le joueur ne peut pas se déplacer à cet endroit");
-                _playersPositions.get(player).moveBottom();}
-        }
-        notifyObserversPlayer();
-    }
-    // Notifier les flèches directionnelles des possibilités de déplacement pour éviter cette pile de condition et de
-    // générer des erreurs => désactivé les flèches impossibles
-
-    public void addObserver(BoardObserver observer) {
-        _observers.add(observer);
-    }
-
-    public void removeObserver(BoardObserver observer) {
-        _observers.remove(observer);
-    }
-    public void removeObserver(int index) {
-        _observers.remove(index);
-    }
-
 }
