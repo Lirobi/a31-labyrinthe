@@ -35,6 +35,11 @@ public class Tile {
         _goal = goal;
     }
 
+    public void deleteGoal() 
+    {
+        _goal = null;
+    }
+
     public Goal getGoal()
     {
         if (existGoal())

@@ -129,9 +129,17 @@ public class Game {
     public void movePlayer(Direction direction)
     {
         _players.movePlayer(direction);
+        Vector2D currentPlayerPosition = _players.getPositionCurrentPlayer();
+        Tile currentPlayerTile = _board.getTileAtPosition(currentPlayerPosition.getX(), currentPlayerPosition.getY());
+        if(currentPlayerTile.getGoal() == _players.getCurrentGoalCurrentPlayer()) {
+            _players.getCurrentPlayer().nextGoal();
+            currentPlayerTile.deleteGoal();
+        }
         changePossibleDirection();
         notifyPossibleDirections();
         notifyObserversBoard();
+        notifyObserversCurrentPlayer();
+        notifyObserversPlayer();
     }
 
     public void nextGoalCurrentPlayer()
