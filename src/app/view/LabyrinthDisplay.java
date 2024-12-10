@@ -21,6 +21,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     private final JPanel _pnlBottom = new JPanel();
     private final JPanel _pnlPlayerInfo = new JPanel();
     private final JPanel _pnlRotateTile = new JPanel();
+    private final JPanel _movementPanel = new JPanel(new GridBagLayout());
     private final int WIDTH = 800;
     private final int HEIGHT = 900;
 
@@ -93,26 +94,26 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlMiddle.setLayout(new GridBagLayout());
         _pnlMiddle.setPreferredSize(new Dimension(700, 700));
         _pnlMiddle.setMinimumSize(new Dimension((int)(WIDTH * 0.7), (int)(WIDTH * 0.7)));
+
+        int tileSize = (int)(_pnlMiddle.getWidth() / 9);
+
+        for (int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                JPanel pnl = new JPanel();
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = i;
+                gbc.gridy = j;
+                pnl.setPreferredSize(new Dimension(tileSize, tileSize));
+                _pnlMiddle.add(pnl, gbc);
+            }
+        }
+
     }
 
     private void initializeBottomPanel() {
         _pnlBottom.setLayout(new BorderLayout());
         
-        // Player movement controls
-        JPanel movementPanel = new JPanel(new GridBagLayout());
-        String[] directions = {"↑", "→", "↓", "←"};
-        Direction[] moveDirections = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
         
-        GridBagConstraints gbc = new GridBagConstraints();
-        for (int i = 0; i < directions.length; i++) {
-            JButton btn = new JButton(directions[i]);
-            final Direction dir = moveDirections[i];
-            btn.addActionListener(e -> _controller.movePlayer(dir));
-            
-            gbc.gridx = i == 1 ? 2 : (i == 3 ? 0 : 1);
-            gbc.gridy = i == 0 ? 0 : (i == 2 ? 2 : 1);
-            movementPanel.add(btn, gbc);
-        }
 
         // Player information panel
         _pnlPlayerInfo.setLayout(new GridLayout(4, 1));
@@ -124,7 +125,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         JButton endTurnButton = new JButton("End Turn");
         endTurnButton.addActionListener(e -> _controller.endTurn());
 
-        _pnlBottom.add(movementPanel, BorderLayout.CENTER);
+        _pnlBottom.add(_movementPanel, BorderLayout.CENTER);
         _pnlBottom.add(endTurnButton, BorderLayout.SOUTH);
     }
 
@@ -263,13 +264,23 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                         _pnlMiddle.add(button, constraints);
                     }
                 } else {
-                    BufferedImage image = drawPlayerOnImage(getTileImage(tiles[i - 1][j - 1]));
+                    BufferedImage image = getTileImage(tiles[i - 1][j - 1]);
+                    for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
+                        if(entry.getValue().getX() == i - 1 && entry.getValue().getY() == j - 1) {
+                            image = drawPlayerOnImage(image);
+                        }
+                    }
+                    BufferedImage finalImage = image;
+
+                    
 
                     JPanel panel = new JPanel() {  
+                        
                         @Override
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g); 
-                            if (image != null) {
+                            
+                            if (finalImage != null) {
                                 // Use better quality rendering
                                 Graphics2D g2d = (Graphics2D) g;
                                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -277,7 +288,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                                                    RenderingHints.VALUE_RENDER_QUALITY);
                                 
-                                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                                g2d.drawImage(finalImage, 0, 0, getWidth(), getHeight(), this);
                             }
                         }
                     };
@@ -358,7 +369,28 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
     public void updatePossibleDirections(ArrayList<Direction> possibleDirections)
     {
+        System.out.println(possibleDirections);
+        _movementPanel.removeAll();
+        // Player movement controls
+        String[] directions = {"↑", "→", "↓", "←"};
+        Direction[] moveDirections = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        for (int i = 0; i < directions.length; i++) {
+            JButton btn = new JButton(directions[i]);
+            final Direction dir = moveDirections[i];
 
+            gbc.gridx = i == 1 ? 2 : (i == 3 ? 0 : 1);
+            gbc.gridy = i == 0 ? 0 : (i == 2 ? 2 : 1);
+            if(possibleDirections.contains(dir)) {
+                btn.addActionListener(e -> _controller.movePlayer(dir));
+            } else {
+                btn.setBackground(Color.RED);
+            }
+            _movementPanel.add(btn, gbc);
+        }
+        _movementPanel.repaint();
+        _movementPanel.revalidate();
     }
 }
 
