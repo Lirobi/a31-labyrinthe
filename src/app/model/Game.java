@@ -19,18 +19,21 @@ public class Game {
     {
         // generate the board
         _board.initBoard();
-        notifyObserversBoard();
         // generate the alone tile
         TileFactory ft = new TileFactory();
         _aloneTile = ft.createI();
-        notifyObserversTile();
         // generate players
         _players.generatePlayers();
+        
+        // Genere les possibilités de déplacement
+        changePossibleDirection();
+
         notifyObserversPlayer();
         notifyObserversCurrentPlayer();
-        // generate the first action
-        changePossibleDirection();
         notifyPossibleDirections();
+        notifyObserversTile();
+        notifyObserversBoard();
+        notifyObserversBoard();
     }
 
     public Tile changeByDirection(Direction dir, int numRowCol, Tile newTile)
@@ -44,6 +47,7 @@ public class Game {
             case SOUTH -> _board.changeBySouth(numRowCol, newTile);
             case WEST -> _board.changeByWest(numRowCol, newTile);
         };
+        notifyPossibleDirections();
         notifyObserversBoard();
         return tempRetour;
     }

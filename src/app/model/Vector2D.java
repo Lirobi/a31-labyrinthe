@@ -6,25 +6,25 @@ public class Vector2D {
 
     public Vector2D(int x, int y)
     {
-        _x = x;
-        _y = y;
+        _x = y;
+        _y = x;
     }
 
     public void moveLeft()
     {
-        _x--;
+        _y--;
     }
     public void moveRight()
     {
-        _x++;
+        _y++;
     }
     public void moveTop()
     {
-        _y--;
+        _x--;
     }
     public void moveBottom()
     {
-        _y++;
+        _x++;
     }
     public int getX(){return _x;}
     public int getY(){return _y;}
