@@ -4,17 +4,17 @@ import java.util.*;
 
 public class Game {
 
-    public Game()
-    {
 
-    }
 
     private final List<BoardObserver> _observers = new ArrayList<>();
     private final PlayerManagement _players = new PlayerManagement();
     private Tile _aloneTile;
     private final Board _board = new Board();
     private final ArrayList<Direction> _possibleDirectionsOfCurrentPlayer = new ArrayList<>();
+    public Game()
+    {
 
+    }
     public void initGame()
     {
         // generate the board

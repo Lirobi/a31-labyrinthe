@@ -45,8 +45,8 @@ package app {
 
         class playerManagement
         {
-            - {final} NAME : String[]
-            - {final} PLAYER_NUMBER: Integer
+            - NAME : String[]
+            - PLAYER_NUMBER: Integer
             - _currentPlayer: Integer
             + <<create>> playerManagement()
             + generatePlayers()
@@ -65,7 +65,7 @@ package app {
         playerManagement *--> "*\n- _players"Player
 
         class Board{
-            - {final} SIZE: Integer
+            - SIZE: Integer
             + <<create>> Board()
             + initBoard()
             - generateBoard()
@@ -113,7 +113,7 @@ package app {
         Tile o-->"*\n- _possibleDirections" Direction: > can move 
 
         class TileFactory{
-            - {final} _path: String
+            - _path: String
             + <<create>> TileFactory
             + createT(): Tile
             + createI(): Tile
@@ -191,8 +191,8 @@ package app {
     {
         class LabyrinthDisplay implements app.model.BoardObserver
         {
-            - {final} WIDTH: Integer
-            - {final} HEIGHT: Integer
+            - WIDTH: Integer
+            - HEIGHT: Integer
             - _pnlContentPane: JPanel
             - _pnlTop: JPanel
             - _pnlMiddle: JPanel
