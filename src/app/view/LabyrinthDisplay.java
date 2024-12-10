@@ -270,7 +270,10 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                         _pnlMiddle.add(button, constraints);
                     }
                 } else {
-                    BufferedImage image = getTileImage(tiles[i - 1][j - 1]);
+
+                    Tile currentTile  = tiles[i - 1][j - 1];
+
+                    BufferedImage image = getTileImage(currentTile);
                     for (Map.Entry<Player, Vector2D> entry : players.entrySet()) {
                         if(entry.getValue().getX() == i - 1 && entry.getValue().getY() == j - 1) {
                             image = drawPlayerOnImage(image, entry.getKey());
@@ -279,7 +282,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                     BufferedImage finalImage = image;
 
                     
-
                     JPanel panel = new JPanel() {  
                         
                         @Override
@@ -290,14 +292,23 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                                 // Use better quality rendering
                                 Graphics2D g2d = (Graphics2D) g;
                                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                                                   RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-                                                   RenderingHints.VALUE_RENDER_QUALITY);
+                                RenderingHints.VALUE_RENDER_QUALITY);
                                 
                                 g2d.drawImage(finalImage, 0, 0, getWidth(), getHeight(), this);
                             }
                         }
                     };
+
+                    if(currentTile.getGoal() != null) {
+                        panel.setLayout(new BorderLayout());
+                        JLabel lbl = new JLabel(currentTile.getGoal().toString());
+                        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+                        lbl.setForeground(Color.BLACK);
+                        panel.add(lbl);
+                    }
+
                     panel.setName("tilePanel");
                     panel.setPreferredSize(new Dimension(tileSize, tileSize));
                     panel.setBackground(Color.WHITE); // Add background color
@@ -372,6 +383,13 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         setTitle("Labyrinthe - Player " + player.getName());
         _lblCurrentPlayer.setText("Current player: " + player.getName());
         _lblCururentGoal.setText("Current goal: " + player.getCurrentGoal().toString());
+
+        switch(player.getName()) {
+            case "jaune" -> _lblCurrentPlayer.setForeground(Color.YELLOW);
+            case "bleu" -> _lblCurrentPlayer.setForeground(Color.BLUE);
+            case "vert" -> _lblCurrentPlayer.setForeground(Color.GREEN);
+            case "rouge" -> _lblCurrentPlayer.setForeground(Color.RED);
+        }
     }
 
     @Override

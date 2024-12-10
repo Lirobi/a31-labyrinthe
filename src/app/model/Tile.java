@@ -6,7 +6,7 @@ import java.util.Stack;
 public class Tile {
     private final String _pathImg;
     private final ArrayList<Direction> _possibleDirections = new ArrayList<>();
-    private final Goal _goal;
+    private Goal _goal;
 
     public Tile(Goal goal, Stack<Direction> form, String path)
     {
@@ -28,6 +28,11 @@ public class Tile {
     public ArrayList<Direction> getDirection()
     {
         return _possibleDirections;
+    }
+
+    public void setGoal(Goal goal) 
+    {
+        _goal = goal;
     }
 
     public Goal getGoal()

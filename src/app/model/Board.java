@@ -90,6 +90,21 @@ public class Board {
             }
         }
 
+        Stack<Goal> goals = new Stack<Goal>();
+
+        for(Goal g : Goal.values())
+            goals.push(g);
+
+        for(int i = 0; i < 24; i++) {
+            int rdm = new Random().nextInt(49);
+            if(set[rdm].existGoal()) {
+                i--;
+            }
+            else {
+                set[rdm].setGoal(goals.pop());
+            }
+        }
+
         return set;
     }
 
