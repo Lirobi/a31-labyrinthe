@@ -8,12 +8,12 @@ public class Tile {
     private final ArrayList<Direction> _possibleDirections = new ArrayList<>();
     private Goal _goal;
 
-    public Tile(Goal goal, Stack<Direction> form, String path)
+    public Tile(Stack<Direction> form, String path)
     {
         _pathImg = path;
         while (!form.empty())
             _possibleDirections.add(form.pop());
-        _goal = goal;
+        _goal = null;
     }
 
     public void rotate() {
