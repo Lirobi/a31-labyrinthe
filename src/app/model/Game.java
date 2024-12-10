@@ -25,8 +25,7 @@ public class Game {
         // generate players
         _players.generatePlayers();
         
-        // Genere les possibilités de déplacement
-        changePossibleDirection();
+
 
         notifyObserversPlayer();
         notifyObserversCurrentPlayer();
