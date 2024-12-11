@@ -84,4 +84,4 @@ fabric.properties
 ./.vscode
 ./.idea
 .DS_Store
-./psd
+psd/
