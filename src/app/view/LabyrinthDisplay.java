@@ -147,9 +147,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlContentPane.add(_pnlBottom, gbc);
     }
 
-    public void display(String message) {
-        System.out.println(message);
-    }
+
 
     public BufferedImage drawPlayerOnImage(BufferedImage image, Player player) {
 
@@ -374,8 +372,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         // Refresh the display
         _currentTilePanel.revalidate();
         _currentTilePanel.repaint();
-        
-        display("Tile rotated");
     }
 
     @Override
@@ -395,7 +391,6 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
     @Override
     public void updatePossibleDirections(ArrayList<Direction> possibleDirections)
     {
-        System.out.println(possibleDirections);
         _movementPanel.removeAll();
         // Player movement controls
         String[] directions = {"↑", "→", "↓", "←"};

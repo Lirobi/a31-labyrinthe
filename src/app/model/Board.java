@@ -97,7 +97,7 @@ public class Board {
 
         for(int i = 0; i < 24; i++) {
             int rdm = new Random().nextInt(49);
-            if(set[rdm].existGoal()) {
+            if(set[rdm].existGoal() || rdm == 0 || rdm == 6 || rdm == 42 || rdm == 48) {
                 i--;
             }
             else {
