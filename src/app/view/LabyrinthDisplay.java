@@ -13,8 +13,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import app.model.BoardObserver;
-
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
     private final JPanel _pnlContentPane = new JPanel();
@@ -43,6 +41,9 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         //setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Show the startup dialog after the main window is visible
+        SwingUtilities.invokeLater(this::showStartupDialog);
+
         initializeTopPanel();
         initializeMiddlePanel();
         initializeBottomPanel();
@@ -50,6 +51,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
         setContentPane(_pnlContentPane);
         setVisible(true);
+        
     }
 
     private void initializeTopPanel() {
@@ -90,6 +92,8 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         _pnlCurrentPlayer.add(_lblCurrentPlayer);
         _pnlCurrentPlayer.add(_lblCururentGoal);
         _pnlTop.add(_pnlCurrentPlayer, BorderLayout.EAST);
+
+
     }
 
     private void initializeMiddlePanel() {
@@ -423,6 +427,87 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
         }
         _movementPanel.repaint();
         _movementPanel.revalidate();
+    }
+
+    private void showStartupDialog() {
+        JDialog dialog = new JDialog(this, "Welcome to Labyrinth", true); // true makes it modal
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Add welcome message
+        JLabel welcomeLabel = new JLabel("Welcome to Labyrinth!", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(welcomeLabel, gbc);
+
+        // Add game instructions
+        JTextArea instructions = new JTextArea(
+            "Game Instructions:\n\n" +
+            "1. Use arrow buttons to move your player\n" +
+            "2. Rotate and insert tiles to create paths\n" +
+            "3. Collect all your goals to win\n" +
+            "4. End your turn when you're done moving"
+        );
+        instructions.setEditable(false);
+        instructions.setBackground(panel.getBackground());
+        instructions.setWrapStyleWord(true);
+        instructions.setLineWrap(true);
+        instructions.setMargin(new Insets(10, 10, 10, 10));
+        panel.add(instructions, gbc);
+
+        // Add start button
+        JButton startButton = new JButton("Start Game");
+        startButton.addActionListener(e -> {
+            dialog.dispose();
+        });
+        panel.add(startButton, gbc);
+
+        dialog.add(panel);
+        dialog.pack();
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(this);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.setVisible(true);
+    }
+
+    @Override
+    public void updateGameStatus(GameStatus status) {
+
+    }
+
+    @Override
+    public void updateGameStatus(GameStatus status, Player winner) {
+        if (status == GameStatus.ENDED) {
+            JDialog dialog = new JDialog(this, "Game Over!", true);
+            JPanel panel = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+            JLabel winnerLabel = new JLabel("Player " + winner.getName() + " wins!", SwingConstants.CENTER);
+            winnerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            panel.add(winnerLabel, gbc);
+
+            JLabel congratsLabel = new JLabel("Congratulations!", SwingConstants.CENTER);
+            congratsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            panel.add(congratsLabel, gbc);
+
+            JButton exitButton = new JButton("Exit Game");
+            exitButton.addActionListener(e -> {
+                dialog.dispose();
+            });
+            panel.add(exitButton, gbc);
+
+            dialog.add(panel);
+            dialog.pack();
+            dialog.setSize(300, 200);
+            dialog.setLocationRelativeTo(this);
+            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            dialog.setVisible(true);
+        }
     }
 }
 
