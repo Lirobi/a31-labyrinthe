@@ -221,6 +221,7 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
         return image;
     }
+
     /**
      * @param tiles is a tab
      */
@@ -365,6 +366,13 @@ public class LabyrinthDisplay extends JFrame implements BoardObserver {
                 }
             }
         };
+        if(_currentTile.getGoal() != null) {
+            tileDisplay.setLayout(new BorderLayout());
+            JLabel lbl = new JLabel(_currentTile.getGoal().toString());
+            lbl.setHorizontalAlignment(SwingConstants.CENTER);
+            lbl.setForeground(Color.BLACK);
+            tileDisplay.add(lbl);
+        }
         tileDisplay.setPreferredSize(new Dimension(70,70)); // Match the game board tile size
         tileDisplay.setBackground(Color.WHITE);
         

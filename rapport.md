@@ -94,7 +94,7 @@ Run:
 Jar:
 - Dans un terminal à la racine du projet, taper la commande 'make jar'.
 
-Lancement:
+Lancement du jar:
 - Dans un terminal à la racine du projet, taper la commande 'java -jar out/Labyrinthe.jar'.
 
 Nettoyage:
