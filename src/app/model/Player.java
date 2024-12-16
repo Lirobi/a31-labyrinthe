@@ -35,9 +35,11 @@ public class Player {
      */
     public void nextGoal()
     {
-        _goalsStack.pop();
-        _goalSuccessful++;
-        _goalMax--;
+        if (isRestGoal()) {
+            _goalsStack.pop();
+            _goalSuccessful++;
+            _goalMax--;
+        }
     }
 
     public Goal getCurrentGoal()

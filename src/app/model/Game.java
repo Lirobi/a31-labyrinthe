@@ -40,11 +40,37 @@ public class Game {
         if (!_board.isMovable(numRowCol))
             throw new IllegalArgumentException("Vous n'avez pas le droit de pousser une carte à cette endroit");
 
-        Tile tempRetour = switch (dir){
-            case NORTH -> _board.changeByNorth(numRowCol, newTile);
-            case EAST -> _board.changeByEast(numRowCol, newTile);
-            case SOUTH -> _board.changeBySouth(numRowCol, newTile);
-            case WEST -> _board.changeByWest(numRowCol, newTile);
+        Tile tempRetour = null;
+        switch (dir){
+            case NORTH -> {
+                tempRetour = _board.changeByNorth(numRowCol, newTile);
+
+                for (Map.Entry<Player, Vector2D> entry : _players.getPlayer().entrySet()) {
+                    if (entry.getValue().getX() == numRowCol)
+                        entry.getValue().moveRight();
+                }
+            }
+            case EAST -> {tempRetour = _board.changeByEast(numRowCol, newTile);
+
+                for (Map.Entry<Player, Vector2D> entry : _players.getPlayer().entrySet()) {
+                    if (entry.getValue().getY() == numRowCol)
+                        entry.getValue().moveTop();
+                }
+            }
+            case SOUTH ->{tempRetour = _board.changeBySouth(numRowCol, newTile);
+
+                for (Map.Entry<Player, Vector2D> entry : _players.getPlayer().entrySet()) {
+                    if (entry.getValue().getX() == numRowCol)
+                        entry.getValue().moveLeft();
+                }
+            }
+            case WEST ->{tempRetour = _board.changeByWest(numRowCol, newTile);
+
+                for (Map.Entry<Player, Vector2D> entry : _players.getPlayer().entrySet()) {
+                    if (entry.getValue().getY() == numRowCol)
+                        entry.getValue().moveBottom();
+                }
+            }
         };
         changePossibleDirection();
         notifyPossibleDirections();
@@ -129,12 +155,7 @@ public class Game {
     public void movePlayer(Direction direction)
     {
         _players.movePlayer(direction);
-        Vector2D currentPlayerPosition = _players.getPositionCurrentPlayer();
-        Tile currentPlayerTile = _board.getTileAtPosition(currentPlayerPosition.getX(), currentPlayerPosition.getY());
-        if(currentPlayerTile.getGoal() == _players.getCurrentGoalCurrentPlayer()) {
-            _players.getCurrentPlayer().nextGoal();
-            currentPlayerTile.deleteGoal();
-        }
+
         changePossibleDirection();
         notifyPossibleDirections();
         notifyObserversBoard();
@@ -154,7 +175,7 @@ public class Game {
 
     public boolean ifCurrentPlayerWin()
     {
-        return _players.ifCurrentPlayerRestGoal();
+        return _players.ifCurrentPlayerRestGoal() && _players.ifCurrentPlayerHasComeBack();
     }
 
     public Tile getTileCurrentPlayer()
@@ -184,6 +205,4 @@ public class Game {
         System.out.println("Fin du jeu");
         System.exit(0);
     }
-
-
 }

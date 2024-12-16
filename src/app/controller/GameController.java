@@ -40,15 +40,15 @@ public class GameController {
     }
     public void endTurn() {
 
-        if (_game.ifCurrentPlayerWin()) {
-            _game.endGame();
+        if (_testIfTilePushed) {
+            if (_game.ifCurrentPlayerWin()) {
+                _game.endGame();
+            } else {
+                _game.nextTurn();
+            }
+            _testIfTilePushed = false;
         }
-        else {
-            _game.nextTurn();
-        }
-        _testIfTilePushed = false;
     }
-
     public boolean isMovable(int index)
     {
         return _game.isMovable(index);

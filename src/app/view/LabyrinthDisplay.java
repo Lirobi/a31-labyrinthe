@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import app.model.BoardObserver;
+
 public class LabyrinthDisplay extends JFrame implements BoardObserver {
 
     private final JPanel _pnlContentPane = new JPanel();
